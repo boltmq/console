@@ -1,0 +1,54 @@
+
+# config web
+[web]
+    debug=true
+    desc="blotmq api v1"
+
+    [web.serve]
+        procotol="http"
+        listen="0.0.0.0:8970"
+
+        [web.serve.cross]
+            allow_origins=["*"]
+            allow_methods=["OPTIONS", "HEAD", "GET", "POST", "PUT", "DELETE"]
+            allow_headers=["Content-Type", "Origin", "X-Requested-With", "Accept", "Authorization"]
+            allow_credentials=true
+            max_age=3600
+
+        [web.serve.session]
+            name="blotmq_console_seesion"
+            expires=3600
+
+            [web.serve.session.secure]
+                enabled=false
+                hash="cloudzonehashkey"
+                block="cloudzoneblockey"
+
+            [web.serve.session.db]
+                enabled=false
+                addr="127.0.0.1:6379"
+                password=""
+                database="0"
+                max_idle=0
+                max_active=0
+                timeout=300
+                max_age=0
+                prefix=""
+
+
+# config log
+[log]
+    path=""
+    cache_size=10000
+    enable_func_call_depth=false
+    func_call_depth=3
+
+    [log.engine]
+        adapter="file"
+
+        [log.engine.config]
+            filename="E:\\source\\src\\github.com\\boltmq\\console\\web\\logs\\console.log"
+            level=6
+            maxdays=30
+            enableFuncCallDepth=false
+            loggerFuncCallDepth=3
