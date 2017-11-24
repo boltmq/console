@@ -12,3 +12,43 @@
 
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
+
+_testmain.go
+
+*.swp
+*.iml
+.idea/
+.idea/*
+
+
+*.tmp
+unit_test_*/*
+
+
+# beego/logs/logger.go文件有额外修改
+!vendor/github.com/astaxie/beego/logs/*/
+
+vendor/*/
+
+.DS_Store
+docs/.DS_Store
+docs/static/.DS_Store
+
+conf/cfg.example.json
+conf/cfg.json
+conf/cfg.toml
+
+web/logs/
+web/logs/*.log
+web/logs/*.*
+
+web/web
+web/console
+
+web/web.exe
+web/console.exe
+
+target/
+target/*
+target/*.*
+target/**/*.*
