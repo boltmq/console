@@ -16,8 +16,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"net/http"
 	"os"
+
+	"github.com/boltmq/console/admin/server"
 )
 
 const (
@@ -28,8 +29,9 @@ func main() {
 	h := flag.Bool("h", false, "help")
 	v := flag.Bool("v", false, "version")
 	port := flag.Int("p", 8000, "listen port")
-	webRoot := flag.String("root", "./sources", "web file root")
-	durl := flag.String("def_url", "/sources/index.html", "default url redirect path")
+	root := flag.String("root", "./sources", "web root")
+	index := flag.String("index", "/sources/index.html", "default home url")
+	debug := flag.Bool("debug", false, "debug model")
 
 	flag.Parse()
 	if *h {
@@ -42,10 +44,8 @@ func main() {
 		os.Exit(0)
 	}
 
-	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, *durl, http.StatusFound)
-	}))
-	http.Handle("/sources/", http.StripPrefix("/sources/", http.FileServer(http.Dir(*webRoot))))
 	fmt.Printf("console is running on port %d.\n", *port)
-	http.ListenAndServe(fmt.Sprintf(":%d", *port), nil)
+	fmt.Printf("Begin with Get      : http://localhost:%d\n", *port)
+	server.New().Index(*index).Root("/sources/", *root).
+		Debug(*debug).Listen(*port).Run()
 }
