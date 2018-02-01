@@ -28,5 +28,29 @@ type Query {
 type Cluster {
 	# The name of cluster
     name: String!
+	# The stats info of cluster
+	stats: ClusterStats!
+}
+
+# A ClusterStats info of boltmq cluster
+type ClusterStats {
+	# The producer nums of cluster
+    producerNums: Int!
+	# The consumer nums of cluster
+    consumerNums: Int!
+	# The broker nums of cluster
+    brokerNums: Int!
+	# The name server nums of cluster
+    namesrvNums: Int!
+	# The topic nums of cluster
+    topicNums: Int!
+	# The cluster consumer msg total number today
+    outTotalTodayNums: Int!
+	# The cluster consumer msg total number yest
+    outTotalYestNums: Int!
+	# The cluster producer msg total number yest
+    inTotalTodayNums: Int!
+	# The cluster producer msg total number today
+    inTotalYestNums: Int!
 }
 `

@@ -17,3 +17,15 @@ var mockClusters = []*cluster{
 	&cluster{name: "cluster1"},
 	&cluster{name: "cluster2"},
 }
+
+func mockQueryCluster(name *string) []*cluster {
+	var cs []*cluster
+
+	for _, c := range mockClusters {
+		if name == nil || *name == "" || *name == c.name {
+			cs = append(cs, c)
+		}
+	}
+
+	return cs
+}

@@ -16,3 +16,15 @@ package graphql
 type cluster struct {
 	name string
 }
+
+type clusterStats struct {
+	producerNums      int32
+	consumerNums      int32
+	brokerNums        int32
+	namesrvNums       int32
+	topicNums         int32
+	outTotalTodayNums int32
+	outTotalYestNums  int32
+	inTotalTodayNums  int32
+	inTotalYestNums   int32
+}

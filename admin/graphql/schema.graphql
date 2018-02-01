@@ -28,7 +28,7 @@ type ClusterStats {
 	# The producer nums of cluster
     producerNums: Int
 	# The consumer nums of cluster
-    producerNums: Int
+    consumerNums: Int
 	# The broker nums of cluster
     brokerNums: Int
 	# The name server nums of cluster
