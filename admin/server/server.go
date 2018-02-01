@@ -16,6 +16,9 @@ package server
 import (
 	"fmt"
 	"net/http"
+
+	graphql "github.com/neelance/graphql-go"
+	"github.com/neelance/graphql-go/relay"
 )
 
 type Server struct {
@@ -41,6 +44,13 @@ func (srv *Server) Root(pattern, webRoot string) *Server {
 	return srv
 }
 
+// LoadGraphQL load graphql to pattern.
+func (srv *Server) LoadGraphQL(pattern, schemaString string, resolver interface{}, opts ...graphql.SchemaOpt) *Server {
+	schema := graphql.MustParseSchema(schemaString, resolver, opts...)
+	srv.mux.Handle(pattern, &relay.Handler{Schema: schema})
+	return srv
+}
+
 // Debug enable debug model，use development evn.
 func (srv *Server) Debug(open bool) *Server {
 	if open {
@@ -50,12 +60,6 @@ func (srv *Server) Debug(open bool) *Server {
 	}
 	return srv
 }
-
-/*
-http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write(page)
-	}))
-*/
 
 // Listen set listen prot
 func (srv *Server) Listen(port int) *Server {

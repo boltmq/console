@@ -27,7 +27,7 @@ var graphiqlPage = []byte(`
 		<div id="graphiql" style="height: 100vh;">Loading...</div>
 		<script>
 			function graphQLFetcher(graphQLParams) {
-				return fetch("/query", {
+				return fetch("/api", {
 					method: "post",
 					body: JSON.stringify(graphQLParams),
 					credentials: "include",

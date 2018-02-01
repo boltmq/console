@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/boltmq/console/admin/graphql"
 	"github.com/boltmq/console/admin/server"
 )
 
@@ -47,5 +48,6 @@ func main() {
 	fmt.Printf("console is running on port %d.\n", *port)
 	fmt.Printf("Begin with Get      : http://localhost:%d\n", *port)
 	server.New().Index(*index).Root("/sources/", *root).
-		Debug(*debug).Listen(*port).Run()
+		Debug(*debug).LoadGraphQL("/api", graphql.Schema, &graphql.QueryResolver{}).
+		Listen(*port).Run()
 }
