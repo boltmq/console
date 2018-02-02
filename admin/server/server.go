@@ -32,15 +32,13 @@ func New() *Server {
 	}
 }
 
-// Index set directory index from server
-func (srv *Server) Index(url string) *Server {
-	srv.mux.Handle("/", http.RedirectHandler(url, http.StatusFound))
-	return srv
-}
-
 // Root set web root directory server, use store static sources file, etc .html .css .js
-func (srv *Server) Root(pattern, webRoot string) *Server {
-	srv.mux.Handle(pattern, http.StripPrefix(pattern, http.FileServer(http.Dir(webRoot))))
+func (srv *Server) Root(pattern, webRoot, index string) *Server {
+	if webRoot != "" {
+		srv.mux.Handle(pattern, http.StripPrefix(pattern, http.FileServer(http.Dir(webRoot))))
+		index = fmt.Sprintf("%s%s", pattern, index)
+		srv.mux.Handle("/", http.RedirectHandler(index, http.StatusFound))
+	}
 	return srv
 }
 

@@ -1,7 +1,45 @@
+# GraphQL API
+
+**查询集群节点
+```
+query clusters($name: String) {
+  clusters(name: $name) {
+    name
+    stats {
+      producerNums
+      consumerNums
+      brokerNums
+      namesrvNums
+      topicNums
+      outTotalTodayNums
+      outTotalYestNums
+      inTotalTodayNums
+      inTotalYestNums
+    }
+    nodes {
+      namesrvAddrs
+      brokerNodes {
+        role
+        addr
+        version
+        desc
+        outTps
+        inTps
+        outTotalTodayNums
+        outTotalYestNums
+        inTotalTodayNums
+        inTotalYestNums
+      }
+    }
+  }
+}
+```
+
+# GraphQL Schema
+```
 # boltmq contole graphql schema
 schema {
 	query: Query
-	mutation: Mutation
 }
 
 # The query type, represents all of the entry points into our object graph
@@ -72,8 +110,4 @@ type BrokerNode {
 	# The cluster producer msg total number today
     inTotalYestNums: Int!
 }
-
-
-# The mutation type, represents all updates we can make to our data
-type Mutation {
-}
+```

@@ -28,3 +28,20 @@ type clusterStats struct {
 	inTotalTodayNums  int32
 	inTotalYestNums   int32
 }
+
+type clusterNode struct {
+	namesrvAddrs []string
+}
+
+type brokerNode struct {
+	role              int32
+	addr              string
+	version           string
+	desc              string
+	outTps            float64
+	inTps             float64
+	outTotalTodayNums int32
+	outTotalYestNums  int32
+	inTotalTodayNums  int32
+	inTotalYestNums   int32
+}

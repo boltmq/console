@@ -30,8 +30,9 @@ func main() {
 	h := flag.Bool("h", false, "help")
 	v := flag.Bool("v", false, "version")
 	port := flag.Int("p", 8000, "listen port")
-	root := flag.String("root", "./sources", "web root")
-	index := flag.String("index", "/sources/index.html", "default home url")
+	root := flag.String("root", "", "web root")
+	prefix := flag.String("perfix", "/", "web root prefix url")
+	index := flag.String("index", "index.html", "default home url")
 	debug := flag.Bool("debug", false, "debug model")
 
 	flag.Parse()
@@ -47,7 +48,7 @@ func main() {
 
 	fmt.Printf("console is running on port %d.\n", *port)
 	fmt.Printf("Begin with Get      : http://localhost:%d\n", *port)
-	server.New().Index(*index).Root("/sources/", *root).
+	server.New().Root(*prefix, *root, *index).
 		LoadGraphQL("/api", graphql.Schema, &graphql.QueryResolver{}).
 		Debug(*debug).Listen(*port).Run()
 }
