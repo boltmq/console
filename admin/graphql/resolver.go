@@ -198,34 +198,22 @@ type topicStoreResolver struct {
 	ts *topicStore
 }
 
-func (r *topicStoreResolver) BrokerAddr(ctx context.Context) string {
-	return r.ts.brokerAddr
-}
-
-func (r *topicStoreResolver) BrokerId(ctx context.Context) int32 {
-	return r.ts.brokerId
-}
-
 func (r *topicStoreResolver) BrokerName(ctx context.Context) string {
 	return r.ts.brokerName
 }
 
-func (r *topicStoreResolver) WriteQueueNums(ctx context.Context) int32 {
-	return r.ts.writeQueueNums
+func (r *topicStoreResolver) QueueId(ctx context.Context) int32 {
+	return r.ts.queueId
 }
 
-func (r *topicStoreResolver) ReadQueueNums(ctx context.Context) int32 {
-	return r.ts.readQueueNums
+func (r *topicStoreResolver) LastUpdateTime(ctx context.Context) string {
+	return r.ts.lastUpdateTime
 }
 
-func (r *topicStoreResolver) Unit(ctx context.Context) bool {
-	return r.ts.unit
+func (r *topicStoreResolver) MaxOffset(ctx context.Context) int32 {
+	return r.ts.maxOffset
 }
 
-func (r *topicStoreResolver) Order(ctx context.Context) bool {
-	return r.ts.order
-}
-
-func (r *topicStoreResolver) Perm(ctx context.Context) int32 {
-	return r.ts.perm
+func (r *topicStoreResolver) MinOffset(ctx context.Context) int32 {
+	return r.ts.minOffset
 }

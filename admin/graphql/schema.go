@@ -114,21 +114,15 @@ enum TopicType {
 
 # A topic stroe info of boltmq cluster
 type TopicStore {
-	# The broker addr
-    brokerAddr: String!
-	# The broker id
-    brokerId: Int!
 	# The broker name
     brokerName: String!
-	# The write queue nums
-    writeQueueNums: Int!
-	# The read queue nums
-    readQueueNums: Int!
-	# The unit topic
-    unit: Boolean!
-	# The order queune
-    order: Boolean!
-	# The permissions of topic on broker
-    perm: Int!
+	# The queue id
+    queueId: Int!
+	# The max offset
+    maxOffset: Int!
+	# The min offset
+    minOffset: Int!
+	# The last update time
+	lastUpdateTime: String!
 }
 `

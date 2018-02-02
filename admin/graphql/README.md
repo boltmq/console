@@ -36,13 +36,11 @@ query clusters($name: String, $like: String) {
       type
       isSystem
       store {
-        brokerAddr
         brokerName
-        writeQueueNums
-        readQueueNums
-        unit
-        order
-        perm
+        queueId
+        maxOffset
+        minOffset
+        lastUpdateTime
       }
     }
   }
@@ -71,6 +69,8 @@ type Cluster {
 	stats: ClusterStats!
 	# The node info of cluster
     nodes: ClusterNode!
+	# The topics of cluster
+	topics(like: String): [Topic]!
 }
 
 # A ClusterStats info of boltmq cluster
@@ -125,5 +125,41 @@ type BrokerNode {
     inTotalTodayNums: Int!
 	# The cluster producer msg total number today
     inTotalYestNums: Int!
+}
+
+# A topic info of boltmq cluster
+type Topic {
+	# The topic name
+    topic: String!
+	# The topic type
+    type: Int!
+	# The topic type
+    isSystem: Boolean!
+	# The topic store
+    store: TopicStore!
+}
+
+# topic type
+enum TopicType {
+    # normal topic
+    NORMAL_TOPIC
+    # retry topic
+    RETRY_TOPIC
+    # deadline queue topic
+    DLQ_TOPIC
+}
+
+# A topic stroe info of boltmq cluster
+type TopicStore {
+	# The broker name
+    brokerName: String!
+	# The queue id
+    queueId: Int!
+	# The max offset
+    maxOffset: Int!
+	# The min offset
+    minOffset: Int!
+	# The last update time
+	lastUpdateTime: String!
 }
 ```

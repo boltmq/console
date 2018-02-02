@@ -61,6 +61,15 @@ const (
 )
 
 type topicStore struct {
+	brokerName     string
+	queueId        int32
+	maxOffset      int32
+	minOffset      int32
+	lastUpdateTime string
+}
+
+/*
+type topicStore struct {
 	brokerAddr     string
 	brokerId       int32
 	brokerName     string
@@ -70,3 +79,4 @@ type topicStore struct {
 	order          bool
 	perm           int32
 }
+*/
