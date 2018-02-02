@@ -17,6 +17,8 @@ type Cluster {
 	stats: ClusterStats!
 	# The node info of cluster
     nodes: ClusterNode!
+	# The topics of cluster
+    topics: [Topic]!
 }
 
 # A ClusterStats info of boltmq cluster
@@ -73,6 +75,47 @@ type BrokerNode {
     inTotalYestNums: Int!
 }
 
+# A topic info of boltmq cluster
+type Topic {
+	# The topic name
+    topic: String!
+	# The topic type
+    type: TopicType!
+	# The topic type
+    isSystem: Boolean!
+	# The topic store
+    store: TopicStore!
+}
+
+# A topic stroe info of boltmq cluster
+type TopicStore {
+	# The broker addr
+    brokerAddr: String!
+	# The broker id
+    brokerId: Int!
+	# The broker name
+    brokerName: Int!
+	# The write queue nums
+    writeQueueNums: Int!
+	# The read queue nums
+    readQueueNums: Int!
+	# The unit topic
+    unit: Boolean!
+	# The order queune
+    order: Boolean!
+	# The permissions of topic on broker
+    perm: Int!
+}
+
+# topic type
+enum TopicType {
+    # normal topic
+    NORMAL_TOPIC
+    # retry topic
+    RETRY_TOPIC
+    # deadline queue topic
+    DLQ_TOPIC
+}
 
 # The mutation type, represents all updates we can make to our data
 type Mutation {

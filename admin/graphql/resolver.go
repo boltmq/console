@@ -58,6 +58,17 @@ func (r *clusterResolver) Nodes() (*clusterNodeResolver, error) {
 	return &clusterNodeResolver{cn: cn, name: r.c.name}, nil
 }
 
+func (r *clusterResolver) Topics() ([]*topicResolver, error) {
+	var trs []*topicResolver
+
+	ts := mockQueryTopics(r.c.name)
+	for _, t := range ts {
+		trs = append(trs, &topicResolver{t: t, name: r.c.name})
+	}
+
+	return trs, nil
+}
+
 type clusterStatsResolver struct {
 	cs *clusterStats
 }
@@ -159,4 +170,62 @@ func (r *brokerNodeResolver) InTotalTodayNums(ctx context.Context) int32 {
 
 func (r *brokerNodeResolver) InTotalYestNums(ctx context.Context) int32 {
 	return r.bn.inTotalYestNums
+}
+
+type topicResolver struct {
+	name string
+	t    *topic
+}
+
+func (r *topicResolver) Topic(ctx context.Context) string {
+	return r.t.topic
+}
+
+func (r *topicResolver) Type(ctx context.Context) int32 {
+	return int32(r.t.typ)
+}
+
+func (r *topicResolver) IsSystem(ctx context.Context) bool {
+	return r.t.isSystem
+}
+
+func (r *topicResolver) Store(ctx context.Context) (*topicStoreResolver, error) {
+	ts := mockQueryTopicsStore(r.name, r.t.topic)
+	return &topicStoreResolver{ts: ts}, nil
+}
+
+type topicStoreResolver struct {
+	ts *topicStore
+}
+
+func (r *topicStoreResolver) BrokerAddr(ctx context.Context) string {
+	return r.ts.brokerAddr
+}
+
+func (r *topicStoreResolver) BrokerId(ctx context.Context) int32 {
+	return r.ts.brokerId
+}
+
+func (r *topicStoreResolver) BrokerName(ctx context.Context) string {
+	return r.ts.brokerName
+}
+
+func (r *topicStoreResolver) WriteQueueNums(ctx context.Context) int32 {
+	return r.ts.writeQueueNums
+}
+
+func (r *topicStoreResolver) ReadQueueNums(ctx context.Context) int32 {
+	return r.ts.readQueueNums
+}
+
+func (r *topicStoreResolver) Unit(ctx context.Context) bool {
+	return r.ts.unit
+}
+
+func (r *topicStoreResolver) Order(ctx context.Context) bool {
+	return r.ts.order
+}
+
+func (r *topicStoreResolver) Perm(ctx context.Context) int32 {
+	return r.ts.perm
 }

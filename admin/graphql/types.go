@@ -45,3 +45,28 @@ type brokerNode struct {
 	inTotalTodayNums  int32
 	inTotalYestNums   int32
 }
+
+type topic struct {
+	topic    string
+	typ      TopicType
+	isSystem bool
+}
+
+type TopicType int32
+
+const (
+	NORMAL_TOPIC TopicType = iota
+	RETRY_TOPIC
+	DLQ_TOPIC
+)
+
+type topicStore struct {
+	brokerAddr     string
+	brokerId       int32
+	brokerName     string
+	writeQueueNums int32
+	readQueueNums  int32
+	unit           bool
+	order          bool
+	perm           int32
+}

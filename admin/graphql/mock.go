@@ -148,3 +148,101 @@ func mockQueryBrokerNodes(name string) []*brokerNode {
 
 	return []*brokerNode{}
 }
+
+var mockTopics = map[string][]*topic{
+	"cluster1": []*topic{
+		&topic{
+			topic:    "topic1",
+			typ:      NORMAL_TOPIC,
+			isSystem: false,
+		},
+		&topic{
+			topic:    "topic2",
+			typ:      RETRY_TOPIC,
+			isSystem: false,
+		},
+	},
+	"cluster2": []*topic{
+		&topic{
+			topic:    "topic3",
+			typ:      NORMAL_TOPIC,
+			isSystem: false,
+		},
+		&topic{
+			topic:    "topic4",
+			typ:      DLQ_TOPIC,
+			isSystem: true,
+		},
+	},
+}
+
+func mockQueryTopics(name string) []*topic {
+	for n, t := range mockTopics {
+		if name == n {
+			return t
+		}
+	}
+
+	return []*topic{}
+}
+
+var mockTopicsStore = map[string]map[string]*topicStore{
+	"cluster1": map[string]*topicStore{
+		"topic1": &topicStore{
+			brokerAddr:     "10.1.0.1:11911",
+			brokerId:       0,
+			brokerName:     "broker1",
+			writeQueueNums: 100,
+			readQueueNums:  200,
+			unit:           false,
+			order:          false,
+			perm:           1,
+		},
+		"topic2": &topicStore{
+			brokerAddr:     "10.1.0.2:11911",
+			brokerId:       1,
+			brokerName:     "broker2",
+			writeQueueNums: 101,
+			readQueueNums:  201,
+			unit:           true,
+			order:          true,
+			perm:           3,
+		},
+	},
+	"cluster2": map[string]*topicStore{
+		"topic3": &topicStore{
+			brokerAddr:     "10.2.0.1:11911",
+			brokerId:       0,
+			brokerName:     "broker3",
+			writeQueueNums: 100,
+			readQueueNums:  200,
+			unit:           false,
+			order:          false,
+			perm:           1,
+		},
+		"topic4": &topicStore{
+			brokerAddr:     "10.2.0.2:11911",
+			brokerId:       1,
+			brokerName:     "broker4",
+			writeQueueNums: 101,
+			readQueueNums:  201,
+			unit:           true,
+			order:          true,
+			perm:           3,
+		},
+	},
+}
+
+func mockQueryTopicsStore(name, topic string) *topicStore {
+	for n, ts := range mockTopicsStore {
+		if name == n {
+			for tp, s := range ts {
+				if topic == tp {
+					return s
+				}
+			}
+		}
+	}
+
+	return &topicStore{}
+}

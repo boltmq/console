@@ -1,6 +1,6 @@
 # GraphQL API
 
-**查询集群节点
+**Query API**
 ```
 query clusters($name: String) {
   clusters(name: $name) {
@@ -31,9 +31,25 @@ query clusters($name: String) {
         inTotalYestNums
       }
     }
+    topics {
+      topic
+      type
+      isSystem
+      store {
+        brokerAddr
+        brokerName
+        writeQueueNums
+        readQueueNums
+        unit
+        order
+        perm
+      }
+    }
   }
 }
 ```
+
+**Mutation API**
 
 # GraphQL Schema
 ```

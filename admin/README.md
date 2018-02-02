@@ -5,7 +5,7 @@ This is a background program - console, used to manage nodes of boltmq cluster.
 ### Features
 
 * GraphQL API
-* Separate front and rear ends
+* Separate frontend and backend
 * Built-in file server in console admin
 * use Third-party file proxy server, etc nginx.
 
