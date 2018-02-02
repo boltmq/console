@@ -6,5 +6,5 @@ operation and maintenance platform of boltmq cluster, this is web user interface
 * GraphQL API
 * Separate front and rear ends
 * Built-in file server in console admin
-* file server use Third-party server, etc nginx.
+* use Third-party file proxy server, etc nginx.
 
