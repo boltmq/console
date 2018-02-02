@@ -194,6 +194,11 @@ func (r *topicResolver) Store(ctx context.Context) (*topicStoreResolver, error) 
 	return &topicStoreResolver{ts: ts}, nil
 }
 
+func (r *topicResolver) Route(ctx context.Context) (*topicRouteResolver, error) {
+	tr := mockQueryTopicsRoute(r.name, r.t.topic)
+	return &topicRouteResolver{tr: tr}, nil
+}
+
 type topicStoreResolver struct {
 	ts *topicStore
 }
@@ -216,4 +221,80 @@ func (r *topicStoreResolver) MaxOffset(ctx context.Context) int32 {
 
 func (r *topicStoreResolver) MinOffset(ctx context.Context) int32 {
 	return r.ts.minOffset
+}
+
+type topicRouteResolver struct {
+	tr *topicRoute
+}
+
+func (r *topicRouteResolver) Queues(ctx context.Context) ([]*queueDataResolver, error) {
+	var qdrs []*queueDataResolver
+	for _, d := range r.tr.queueDatas {
+		qdrs = append(qdrs, &queueDataResolver{qd: d})
+	}
+
+	return qdrs, nil
+}
+
+func (r *topicRouteResolver) Brokers(ctx context.Context) ([]*brokerDataResolver, error) {
+	var bdrs []*brokerDataResolver
+	for _, d := range r.tr.brokerDatas {
+		bdrs = append(bdrs, &brokerDataResolver{bd: d})
+	}
+
+	return bdrs, nil
+}
+
+type queueDataResolver struct {
+	qd *queueData
+}
+
+func (r *queueDataResolver) BrokerName(ctx context.Context) string {
+	return r.qd.brokerName
+}
+
+func (r *queueDataResolver) ReadQueueNums(ctx context.Context) int32 {
+	return r.qd.readQueueNums
+}
+
+func (r *queueDataResolver) WriteQueueNums(ctx context.Context) int32 {
+	return r.qd.writeQueueNums
+}
+
+func (r *queueDataResolver) Perm(ctx context.Context) int32 {
+	return r.qd.perm
+}
+
+func (r *queueDataResolver) SysFlag(ctx context.Context) int32 {
+	return r.qd.sysFlag
+}
+
+type brokerDataResolver struct {
+	bd *brokerData
+}
+
+func (r *brokerDataResolver) BrokerName(ctx context.Context) string {
+	return r.bd.brokerName
+}
+
+func (r *brokerDataResolver) BrokerAddrs(ctx context.Context) ([]*brokerAddrResolver, error) {
+	var bars []*brokerAddrResolver
+	for bi, ba := range r.bd.brokerAddrs {
+		bars = append(bars, &brokerAddrResolver{bi: bi, ba: ba})
+	}
+
+	return bars, nil
+}
+
+type brokerAddrResolver struct {
+	bi int32
+	ba string
+}
+
+func (r *brokerAddrResolver) BrokerId(ctx context.Context) int32 {
+	return r.bi
+}
+
+func (r *brokerAddrResolver) Addr(ctx context.Context) string {
+	return r.ba
 }

@@ -85,6 +85,8 @@ type Topic {
     isSystem: Boolean!
 	# The topic store
     store: TopicStore!
+	# The topic route
+    route: TopicRoute!
 }
 
 # A topic stroe info of boltmq cluster
@@ -105,6 +107,28 @@ type TopicStore {
     order: Boolean!
 	# The permissions of topic on broker
     perm: Int!
+}
+
+# A topic route info of boltmq cluster
+type TopicRoute {
+	# The route data of queue
+    queues: [QueueData]!
+}
+
+# A queue route data of topic
+type QueueData {
+	# The broker name
+    brokerName: String!
+	# The broker name
+    brokerName: String!
+	# The write queue nums
+    writeQueueNums: Int!
+	# The read queue nums
+    readQueueNums: Int!
+	# The permissions of topic on broker
+    perm: Int!
+	# The permissions of topic on broker
+    sysFlag: Int!
 }
 
 # topic type

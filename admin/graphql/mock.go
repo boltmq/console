@@ -240,3 +240,160 @@ func mockQueryTopicsStore(name, topic string) *topicStore {
 
 	return &topicStore{}
 }
+
+var mockTopicsRoute = map[string]map[string]*topicRoute{
+	"cluster1": map[string]*topicRoute{
+		"topic1": &topicRoute{
+			queueDatas: []*queueData{
+				&queueData{
+					brokerName:     "broker1",
+					readQueueNums:  10,
+					writeQueueNums: 20,
+					perm:           1,
+					sysFlag:        2,
+				},
+				&queueData{
+					brokerName:     "broker2",
+					readQueueNums:  10,
+					writeQueueNums: 20,
+					perm:           1,
+					sysFlag:        2,
+				},
+			},
+			brokerDatas: []*brokerData{
+				&brokerData{
+					brokerName: "broker1",
+					brokerAddrs: map[int32]string{
+						0: "10.1.0.1:11911",
+						1: "10.1.0.2:11911",
+					},
+				},
+				&brokerData{
+					brokerName: "broker2",
+					brokerAddrs: map[int32]string{
+						0: "10.2.0.1:11911",
+						1: "10.2.0.2:11911",
+					},
+				},
+			},
+		},
+		"topic2": &topicRoute{
+			queueDatas: []*queueData{
+				&queueData{
+					brokerName:     "broker1",
+					readQueueNums:  100,
+					writeQueueNums: 200,
+					perm:           1,
+					sysFlag:        2,
+				},
+				&queueData{
+					brokerName:     "broker2",
+					readQueueNums:  100,
+					writeQueueNums: 200,
+					perm:           1,
+					sysFlag:        2,
+				},
+			},
+			brokerDatas: []*brokerData{
+				&brokerData{
+					brokerName: "broker1",
+					brokerAddrs: map[int32]string{
+						0: "10.3.0.1:11911",
+						1: "10.3.0.2:11911",
+					},
+				},
+				&brokerData{
+					brokerName: "broker2",
+					brokerAddrs: map[int32]string{
+						0: "10.4.0.1:11911",
+						1: "10.4.0.2:11911",
+					},
+				},
+			},
+		},
+	},
+	"cluster2": map[string]*topicRoute{
+		"topic3": &topicRoute{
+			queueDatas: []*queueData{
+				&queueData{
+					brokerName:     "broker1",
+					readQueueNums:  10,
+					writeQueueNums: 20,
+					perm:           1,
+					sysFlag:        2,
+				},
+				&queueData{
+					brokerName:     "broker2",
+					readQueueNums:  10,
+					writeQueueNums: 20,
+					perm:           1,
+					sysFlag:        2,
+				},
+			},
+			brokerDatas: []*brokerData{
+				&brokerData{
+					brokerName: "broker3",
+					brokerAddrs: map[int32]string{
+						0: "10.4.0.1:11911",
+						1: "10.4.0.2:11911",
+					},
+				},
+				&brokerData{
+					brokerName: "broker4",
+					brokerAddrs: map[int32]string{
+						0: "10.5.0.1:11911",
+						1: "10.5.0.2:11911",
+					},
+				},
+			},
+		},
+		"topic4": &topicRoute{
+			queueDatas: []*queueData{
+				&queueData{
+					brokerName:     "broker1",
+					readQueueNums:  100,
+					writeQueueNums: 200,
+					perm:           1,
+					sysFlag:        2,
+				},
+				&queueData{
+					brokerName:     "broker2",
+					readQueueNums:  100,
+					writeQueueNums: 200,
+					perm:           1,
+					sysFlag:        2,
+				},
+			},
+			brokerDatas: []*brokerData{
+				&brokerData{
+					brokerName: "broker5",
+					brokerAddrs: map[int32]string{
+						0: "10.6.0.1:11911",
+						1: "10.6.0.2:11911",
+					},
+				},
+				&brokerData{
+					brokerName: "broker4",
+					brokerAddrs: map[int32]string{
+						0: "10.7.0.1:11911",
+						1: "10.7.0.2:11911",
+					},
+				},
+			},
+		},
+	},
+}
+
+func mockQueryTopicsRoute(name, topic string) *topicRoute {
+	for n, tr := range mockTopicsRoute {
+		if name == n {
+			for tp, r := range tr {
+				if topic == tp {
+					return r
+				}
+			}
+		}
+	}
+
+	return &topicRoute{}
+}

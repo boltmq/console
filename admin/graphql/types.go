@@ -68,15 +68,20 @@ type topicStore struct {
 	lastUpdateTime string
 }
 
-/*
-type topicStore struct {
-	brokerAddr     string
-	brokerId       int32
-	brokerName     string
-	writeQueueNums int32
-	readQueueNums  int32
-	unit           bool
-	order          bool
-	perm           int32
+type topicRoute struct {
+	queueDatas  []*queueData
+	brokerDatas []*brokerData
 }
-*/
+
+type queueData struct {
+	brokerName     string
+	readQueueNums  int32
+	writeQueueNums int32
+	perm           int32
+	sysFlag        int32
+}
+
+type brokerData struct {
+	brokerName  string
+	brokerAddrs map[int32]string
+}

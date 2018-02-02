@@ -42,6 +42,22 @@ query clusters($name: String, $like: String) {
         minOffset
         lastUpdateTime
       }
+      route {
+        queues {
+          brokerName
+          writeQueueNums
+          readQueueNums
+          perm
+          sysFlag
+        }
+        brokers {
+          brokerName
+          brokerAddrs {
+            brokerId
+            addr
+          }
+        }
+      }
     }
   }
 }
@@ -137,6 +153,8 @@ type Topic {
     isSystem: Boolean!
 	# The topic store
     store: TopicStore!
+	# The topic route
+    route: TopicRoute!
 }
 
 # topic type
@@ -161,5 +179,43 @@ type TopicStore {
     minOffset: Int!
 	# The last update time
 	lastUpdateTime: String!
+}
+
+# A topic route info of boltmq cluster
+type TopicRoute {
+	# The route data of queue
+    queues: [QueueData]!
+	# The route data of broker
+    brokers: [BrokerData]!
+}
+
+# A queue route data of topic
+type QueueData {
+	# The broker name
+    brokerName: String!
+	# The write queue nums
+    writeQueueNums: Int!
+	# The read queue nums
+    readQueueNums: Int!
+	# The permissions of topic on broker
+    perm: Int!
+	# The permissions of topic on broker
+    sysFlag: Int!
+}
+
+# A broker route data of topic
+type BrokerData {
+	# The broker name
+    brokerName: String!
+	# The broker addrs
+    brokerAddrs: [BrokerAddr]!
+}
+
+# A broker addr of topic route
+type BrokerAddr {
+	# The broker id
+	brokerId: Int!
+	# The broker addr
+	addr: String!
 }
 ```
