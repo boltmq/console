@@ -49,7 +49,7 @@ func (r *clusterResolver) Stats(ctx context.Context) (*clusterStatsResolver, err
 	return &clusterStatsResolver{cs: cs}, nil
 }
 
-func (r *clusterResolver) Nodes() (*clusterNodeResolver, error) {
+func (r *clusterResolver) Nodes(ctx context.Context) (*clusterNodeResolver, error) {
 	cn := mockQueryClusterNode(r.c.name)
 	if cn == nil {
 		return nil, errors.Errorf("cluster=%s not found node.", r.c.name)
@@ -58,10 +58,10 @@ func (r *clusterResolver) Nodes() (*clusterNodeResolver, error) {
 	return &clusterNodeResolver{cn: cn, name: r.c.name}, nil
 }
 
-func (r *clusterResolver) Topics() ([]*topicResolver, error) {
+func (r *clusterResolver) Topics(ctx context.Context, args struct{ Like *string }) ([]*topicResolver, error) {
 	var trs []*topicResolver
 
-	ts := mockQueryTopics(r.c.name)
+	ts := mockQueryTopics(r.c.name, args.Like)
 	for _, t := range ts {
 		trs = append(trs, &topicResolver{t: t, name: r.c.name})
 	}

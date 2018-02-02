@@ -176,14 +176,20 @@ var mockTopics = map[string][]*topic{
 	},
 }
 
-func mockQueryTopics(name string) []*topic {
-	for n, t := range mockTopics {
+func mockQueryTopics(name string, like *string) []*topic {
+	var ts []*topic
+	for n, nts := range mockTopics {
 		if name == n {
-			return t
+			for _, t := range nts {
+				if like == nil || *like == "" || *like == t.topic {
+					ts = append(ts, t)
+				}
+			}
+			break
 		}
 	}
 
-	return []*topic{}
+	return ts
 }
 
 var mockTopicsStore = map[string]map[string]*topicStore{

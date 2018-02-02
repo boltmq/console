@@ -33,7 +33,7 @@ type Cluster {
 	# The node info of cluster
     nodes: ClusterNode!
 	# The topics of cluster
-    topics: [Topic]!
+	topics(like: String): [Topic]!
 }
 
 # A ClusterStats info of boltmq cluster

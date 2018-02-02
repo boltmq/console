@@ -2,7 +2,7 @@
 
 **Query API**
 ```
-query clusters($name: String) {
+query clusters($name: String, $like: String) {
   clusters(name: $name) {
     name
     stats {
@@ -31,7 +31,7 @@ query clusters($name: String) {
         inTotalYestNums
       }
     }
-    topics {
+    topics(like: $like) {
       topic
       type
       isSystem
