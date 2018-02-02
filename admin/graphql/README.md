@@ -58,6 +58,7 @@ query clusters($name: String, $like: String) {
           }
         }
       }
+      groups
     }
   }
 }

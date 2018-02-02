@@ -397,3 +397,40 @@ func mockQueryTopicsRoute(name, topic string) *topicRoute {
 
 	return &topicRoute{}
 }
+
+var mockTopicsGroup = map[string]map[string][]string{
+	"cluster1": map[string][]string{
+		"topic1": []string{
+			"subscription-group",
+			"subscription-group2",
+		},
+		"topic2": []string{
+			"subscription-group3",
+			"subscription-group4",
+		},
+	},
+	"cluster2": map[string][]string{
+		"topic1": []string{
+			"subscription-group5",
+			"subscription-group6",
+		},
+		"topic2": []string{
+			"subscription-group7",
+			"subscription-group8",
+		},
+	},
+}
+
+func mockQueryTopicsGroup(name, topic string) []string {
+	for n, tg := range mockTopicsGroup {
+		if name == n {
+			for tp, g := range tg {
+				if topic == tp {
+					return g
+				}
+			}
+		}
+	}
+
+	return []string{}
+}

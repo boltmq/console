@@ -87,6 +87,8 @@ type Topic {
     store: TopicStore!
 	# The topic route
     route: TopicRoute!
+	# The consume group
+    groups: [String!]!
 }
 
 # A topic stroe info of boltmq cluster

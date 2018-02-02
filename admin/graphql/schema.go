@@ -102,6 +102,8 @@ type Topic {
     store: TopicStore!
 	# The topic route
     route: TopicRoute!
+	# The consume group
+    groups: [String!]!
 }
 
 # topic type

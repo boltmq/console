@@ -199,6 +199,10 @@ func (r *topicResolver) Route(ctx context.Context) (*topicRouteResolver, error) 
 	return &topicRouteResolver{tr: tr}, nil
 }
 
+func (r *topicResolver) Groups(ctx context.Context) []string {
+	return mockQueryTopicsGroup(r.name, r.t.topic)
+}
+
 type topicStoreResolver struct {
 	ts *topicStore
 }
