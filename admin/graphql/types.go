@@ -85,3 +85,30 @@ type brokerData struct {
 	brokerName  string
 	brokerAddrs map[int32]string
 }
+
+type connection struct {
+	consumeGroup     string
+	clientId         string
+	clientAddr       string
+	language         string
+	version          string
+	consumeTps       float64
+	consumeFromWhere string
+	consumeType      ConsumeType
+	diff             int32
+	messageModel     MessageModel
+}
+
+type ConsumeType int32
+
+const (
+	CONSUME_ACTIVELY ConsumeType = iota
+	CONSUME_PASSIVELY
+)
+
+type MessageModel int32
+
+const (
+	BROADCASTING MessageModel = iota
+	CLUSTERING
+)

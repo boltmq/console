@@ -434,3 +434,80 @@ func mockQueryTopicsGroup(name, topic string) []string {
 
 	return []string{}
 }
+
+var mockTopicsConsumeConns = map[string]map[string][]*connection{
+	"cluster1": map[string][]*connection{
+		"topic1": []*connection{
+			&connection{
+				consumeGroup:     "consume-group-1",
+				clientId:         "client1",
+				clientAddr:       "10.1.100.1",
+				language:         "Golang",
+				version:          "1.0.0",
+				consumeTps:       100,
+				consumeFromWhere: "cd",
+				consumeType:      CONSUME_ACTIVELY,
+				diff:             200,
+				messageModel:     BROADCASTING,
+			},
+		},
+		"topic2": []*connection{
+			&connection{
+				consumeGroup:     "consume-group-2",
+				clientId:         "client2",
+				clientAddr:       "10.2.100.1",
+				language:         "Golang",
+				version:          "1.0.0",
+				consumeTps:       200,
+				consumeFromWhere: "cd",
+				consumeType:      CONSUME_ACTIVELY,
+				diff:             400,
+				messageModel:     BROADCASTING,
+			},
+		},
+	},
+	"cluster2": map[string][]*connection{
+		"topic3": []*connection{
+			&connection{
+				consumeGroup:     "consume-group-3",
+				clientId:         "client1",
+				clientAddr:       "10.3.100.1",
+				language:         "Golang",
+				version:          "1.0.0",
+				consumeTps:       300,
+				consumeFromWhere: "cd",
+				consumeType:      CONSUME_ACTIVELY,
+				diff:             600,
+				messageModel:     BROADCASTING,
+			},
+		},
+		"topic4": []*connection{
+			&connection{
+				consumeGroup:     "consume-group-4",
+				clientId:         "client4",
+				clientAddr:       "10.4.100.1",
+				language:         "Golang",
+				version:          "1.0.0",
+				consumeTps:       400,
+				consumeFromWhere: "cd",
+				consumeType:      CONSUME_ACTIVELY,
+				diff:             800,
+				messageModel:     BROADCASTING,
+			},
+		},
+	},
+}
+
+func mockQueryTopicsConsumeConns(name, topic string) []*connection {
+	for n, tg := range mockTopicsConsumeConns {
+		if name == n {
+			for tp, g := range tg {
+				if topic == tp {
+					return g
+				}
+			}
+		}
+	}
+
+	return []*connection{}
+}

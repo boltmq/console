@@ -104,6 +104,8 @@ type Topic {
     route: TopicRoute!
 	# The consume group
     groups: [String!]!
+	# The consume connection
+    consumeConn: ConsumeConn!
 }
 
 # topic type
@@ -166,5 +168,53 @@ type BrokerAddr {
 	brokerId: Int!
 	# The broker addr
 	addr: String!
+}
+
+# consume connection
+type ConsumeConn {
+	# The describe
+    describe: String!
+	# The connection
+    conns: [Connection]!
+}
+
+# connection info
+type Connection {
+	# The consume group name
+    consumeGroup: String!
+	# The client id
+    clientId: String!
+	# The client addr
+    clientAddr: String!
+	# The language
+    language: String!
+	# The version
+    version: String!
+	# The consume tps
+    consumeTps: Float!
+	# The consume from where
+    consumeFromWhere: String!
+	# The consume type
+    consumeType: Int!
+	# The message diff total
+    diff: Int!
+	# The message model
+    messageModel: Int!
+}
+
+# consume type
+enum ConsumeType {
+    # actively consume
+	CONSUME_ACTIVELY
+    # passively consume
+	CONSUME_PASSIVELY
+}
+
+# message model
+enum MessageModel {
+    # broadcasting
+	BROADCASTING 
+    # clustering
+	CLUSTERING
 }
 `

@@ -203,6 +203,10 @@ func (r *topicResolver) Groups(ctx context.Context) []string {
 	return mockQueryTopicsGroup(r.name, r.t.topic)
 }
 
+func (r *topicResolver) ConsumeConn(ctx context.Context) (*consumeConnResolver, error) {
+	return &consumeConnResolver{name: r.name, topic: r.t.topic}, nil
+}
+
 type topicStoreResolver struct {
 	ts *topicStore
 }
@@ -301,4 +305,67 @@ func (r *brokerAddrResolver) BrokerId(ctx context.Context) int32 {
 
 func (r *brokerAddrResolver) Addr(ctx context.Context) string {
 	return r.ba
+}
+
+type consumeConnResolver struct {
+	name  string
+	topic string
+}
+
+func (r *consumeConnResolver) Describe(ctx context.Context) string {
+	return ""
+}
+
+func (r *consumeConnResolver) Conns(ctx context.Context) ([]*connectionResolver, error) {
+	var crs []*connectionResolver
+	cs := mockQueryTopicsConsumeConns(r.name, r.topic)
+	for _, c := range cs {
+		crs = append(crs, &connectionResolver{c: c})
+	}
+
+	return crs, nil
+}
+
+type connectionResolver struct {
+	c *connection
+}
+
+func (r *connectionResolver) ConsumeGroup(ctx context.Context) string {
+	return r.c.consumeGroup
+}
+
+func (r *connectionResolver) ClientId(ctx context.Context) string {
+	return r.c.clientId
+}
+
+func (r *connectionResolver) ClientAddr(ctx context.Context) string {
+	return r.c.clientAddr
+}
+
+func (r *connectionResolver) Language(ctx context.Context) string {
+	return r.c.language
+}
+
+func (r *connectionResolver) Version(ctx context.Context) string {
+	return r.c.version
+}
+
+func (r *connectionResolver) ConsumeTps(ctx context.Context) float64 {
+	return r.c.consumeTps
+}
+
+func (r *connectionResolver) ConsumeFromWhere(ctx context.Context) string {
+	return r.c.consumeFromWhere
+}
+
+func (r *connectionResolver) ConsumeType(ctx context.Context) int32 {
+	return int32(r.c.consumeType)
+}
+
+func (r *connectionResolver) Diff(ctx context.Context) int32 {
+	return r.c.diff
+}
+
+func (r *connectionResolver) MessageModel(ctx context.Context) int32 {
+	return int32(r.c.messageModel)
 }
