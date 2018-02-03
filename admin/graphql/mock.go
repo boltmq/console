@@ -511,3 +511,100 @@ func mockQueryTopicsConsumeConns(name, topic string) []*connection {
 
 	return []*connection{}
 }
+
+var mockTopicsConsumeProgress = map[string]map[string][]*consumeProgress{
+	"cluster1": map[string][]*consumeProgress{
+		"topic1": []*consumeProgress{
+			&consumeProgress{
+				group: "consume-group-1",
+				tps:   100,
+				diff:  10,
+				total: 1,
+				data: []consumeProgressData{
+					consumeProgressData{
+						brokerOffset:  100,
+						consumeOffset: 100,
+						diff:          1,
+						brokerName:    "broker1",
+						queueId:       1,
+					},
+				},
+			},
+			&consumeProgress{
+				group: "consume-group-2",
+				tps:   200,
+				diff:  20,
+				total: 1,
+				data: []consumeProgressData{
+					consumeProgressData{
+						brokerOffset:  200,
+						consumeOffset: 200,
+						diff:          2,
+						brokerName:    "broker2",
+						queueId:       2,
+					},
+				},
+			},
+		},
+	},
+	"cluster2": map[string][]*consumeProgress{
+		"topic2": []*consumeProgress{
+			&consumeProgress{
+				group: "consume-group-3",
+				tps:   300,
+				diff:  30,
+				total: 1,
+				data: []consumeProgressData{
+					consumeProgressData{
+						brokerOffset:  300,
+						consumeOffset: 300,
+						diff:          1,
+						brokerName:    "broker3",
+						queueId:       3,
+					},
+				},
+			},
+			&consumeProgress{
+				group: "consume-group-4",
+				tps:   400,
+				diff:  40,
+				total: 1,
+				data: []consumeProgressData{
+					consumeProgressData{
+						brokerOffset:  400,
+						consumeOffset: 400,
+						diff:          1,
+						brokerName:    "broker4",
+						queueId:       4,
+					},
+				},
+			},
+		},
+	},
+}
+
+func mockQueryTopicsConsumeProgress(name, topic string, group *string) []*consumeProgress {
+	cps := []*consumeProgress{}
+
+	for n, tcps := range mockTopicsConsumeProgress {
+		if name == n {
+			for tp, scps := range tcps {
+				if topic == tp {
+					if group == nil || *group == "" {
+						return scps
+					}
+
+					for _, cp := range scps {
+						if cp.group == *group {
+							cps = append(cps, cp)
+						}
+					}
+
+					break
+				}
+			}
+		}
+	}
+
+	return cps
+}

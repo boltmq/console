@@ -19,8 +19,6 @@ type Cluster {
     nodes: ClusterNode!
 	# The topics of cluster
     topics: [Topic]!
-	# The consume connection
-    consumeConns(topic: String): [ConsumeConn]!
 }
 
 # A ClusterStats info of boltmq cluster

@@ -2,7 +2,7 @@
 
 **Query API**
 ```
-query clusters($name: String, $like: String) {
+query clusters($name: String, $like: String, $group: String) {
   clusters(name: $name) {
     name
     stats {
@@ -72,6 +72,19 @@ query clusters($name: String, $like: String) {
           consumeType
           diff
           messageModel
+        }
+      }
+      consumeProgress(group: $group) {
+        consumeGroup
+        tps
+        diff
+        total
+        progress {
+          brokerOffset
+          consumeOffset
+          diff
+          brokerName
+          queueId
         }
       }
     }
@@ -175,6 +188,7 @@ type Topic {
     groups: [String!]!
 	# The consume connection
     consumeConn: ConsumeConn!
+	consumeProgress(group: String): [ConsumeProgress]!
 }
 
 # topic type
@@ -285,5 +299,33 @@ enum MessageModel {
 	BROADCASTING 
     # clustering
 	CLUSTERING
+}
+
+# consume progress
+type ConsumeProgress {
+	# The consume group name
+	consumeGroup: String!
+	# The consume tps
+	tps: Float!
+	# The consume diff
+	diff: Int!
+	# The total
+	total: Int!
+	# The progress data list
+	progress: [ConsumeProgressData]!
+}
+
+# consume progress data
+type ConsumeProgressData {
+	# The broker offset
+	brokerOffset: Int!
+	# The broker offset
+	consumeOffset: Int!
+	# The consume diff
+	diff: Int!
+	# The broker name
+	brokerName: String!
+	# The queue id
+	queueId: Int!
 }
 ```

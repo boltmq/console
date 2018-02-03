@@ -112,3 +112,19 @@ const (
 	BROADCASTING MessageModel = iota
 	CLUSTERING
 )
+
+type consumeProgress struct {
+	group string
+	tps   float64
+	diff  int32
+	total int32
+	data  []consumeProgressData
+}
+
+type consumeProgressData struct {
+	brokerOffset  int64
+	consumeOffset int64
+	diff          int32
+	brokerName    string
+	queueId       int32
+}

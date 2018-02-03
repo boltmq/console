@@ -207,6 +207,17 @@ func (r *topicResolver) ConsumeConn(ctx context.Context) (*consumeConnResolver, 
 	return &consumeConnResolver{name: r.name, topic: r.t.topic}, nil
 }
 
+func (r *topicResolver) ConsumeProgress(ctx context.Context, args struct{ Group *string }) ([]*consumeProgressResolver, error) {
+	var cprs []*consumeProgressResolver
+
+	cps := mockQueryTopicsConsumeProgress(r.name, r.t.topic, args.Group)
+	for _, cp := range cps {
+		cprs = append(cprs, &consumeProgressResolver{cp: cp})
+	}
+
+	return cprs, nil
+}
+
 type topicStoreResolver struct {
 	ts *topicStore
 }
@@ -368,4 +379,57 @@ func (r *connectionResolver) Diff(ctx context.Context) int32 {
 
 func (r *connectionResolver) MessageModel(ctx context.Context) int32 {
 	return int32(r.c.messageModel)
+}
+
+type consumeProgressResolver struct {
+	cp *consumeProgress
+}
+
+func (r *consumeProgressResolver) ConsumeGroup(ctx context.Context) string {
+	return r.cp.group
+}
+
+func (r *consumeProgressResolver) Tps(ctx context.Context) float64 {
+	return r.cp.tps
+}
+
+func (r *consumeProgressResolver) Diff(ctx context.Context) int32 {
+	return r.cp.diff
+}
+
+func (r *consumeProgressResolver) Total(ctx context.Context) int32 {
+	return r.cp.total
+}
+
+func (r *consumeProgressResolver) Progress(ctx context.Context) ([]*consumeProgressDataResolver, error) {
+	var cpdrs []*consumeProgressDataResolver
+	for _, cpd := range r.cp.data {
+		cpdrs = append(cpdrs, &consumeProgressDataResolver{cpd: cpd})
+	}
+
+	return cpdrs, nil
+}
+
+type consumeProgressDataResolver struct {
+	cpd consumeProgressData
+}
+
+func (r *consumeProgressDataResolver) BrokerOffset(ctx context.Context) int32 {
+	return int32(r.cpd.brokerOffset)
+}
+
+func (r *consumeProgressDataResolver) ConsumeOffset(ctx context.Context) int32 {
+	return int32(r.cpd.consumeOffset)
+}
+
+func (r *consumeProgressDataResolver) Diff(ctx context.Context) int32 {
+	return r.cpd.diff
+}
+
+func (r *consumeProgressDataResolver) BrokerName(ctx context.Context) string {
+	return r.cpd.brokerName
+}
+
+func (r *consumeProgressDataResolver) QueueId(ctx context.Context) int32 {
+	return r.cpd.queueId
 }
