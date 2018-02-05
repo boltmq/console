@@ -10,16 +10,6 @@ This is a background program - console, used to manage nodes of boltmq cluster.
 * use Third-party file proxy server, etc nginx.
 
 
-### Get it
-
-**Build it from source code**
-
-Get source code from Github:
-```Go
-git clone https://github.com/boltmq/console.git
-```
-
-
 ### Running Param
 
 * -p listen port
