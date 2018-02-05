@@ -713,3 +713,78 @@ func mockQueryMsgsInfo(name *string, msgId string) *messageInfo {
 
 	return &messageInfo{}
 }
+
+var mockMsgTracks = map[string]map[string][]*messageTrack{
+	"cluster1": map[string][]*messageTrack{
+		"msgid1abcdefghajklmnopqrstuvwxyz": []*messageTrack{
+			&messageTrack{
+				code:         1,
+				consumeGroup: "consume group 1",
+				trackType:    SubscribedAndConsumed,
+				desc:         "",
+			},
+			&messageTrack{
+				code:         1,
+				consumeGroup: "consume group 2",
+				trackType:    SubscribedAndConsumed,
+				desc:         "",
+			},
+		},
+		"msgid2abcdefghajklmnopqrstuvwxyz": []*messageTrack{
+			&messageTrack{
+				code:         1,
+				consumeGroup: "consume group 3",
+				trackType:    SubscribedAndConsumed,
+				desc:         "",
+			},
+			&messageTrack{
+				code:         1,
+				consumeGroup: "consume group 4",
+				trackType:    SubscribedAndConsumed,
+				desc:         "",
+			},
+		},
+	},
+	"cluster2": map[string][]*messageTrack{
+		"msgid3abcdefghajklmnopqrstuvwxyz": []*messageTrack{
+			&messageTrack{
+				code:         1,
+				consumeGroup: "consume group 5",
+				trackType:    SubscribedAndConsumed,
+				desc:         "",
+			},
+			&messageTrack{
+				code:         1,
+				consumeGroup: "consume group 6",
+				trackType:    SubscribedAndConsumed,
+				desc:         "",
+			},
+		},
+		"msgid4abcdefghajklmnopqrstuvwxyz": []*messageTrack{
+			&messageTrack{
+				code:         1,
+				consumeGroup: "consume group 7",
+				trackType:    SubscribedAndConsumed,
+				desc:         "",
+			},
+			&messageTrack{
+				code:         1,
+				consumeGroup: "consume group 8",
+				trackType:    SubscribedAndConsumed,
+				desc:         "",
+			},
+		},
+	},
+}
+
+func mockQueryMsgTracks(name *string, msgId string) []*messageTrack {
+	for _, tracks := range mockMsgTracks {
+		for mid, ts := range tracks {
+			if mid == msgId {
+				return ts
+			}
+		}
+	}
+
+	return []*messageTrack{}
+}

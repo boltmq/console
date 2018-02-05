@@ -2,7 +2,7 @@
 
 **Query API**
 ```
-query clusters($name: String, $like: String, $group: String) {
+query clusters($name: String, $like: String, $group: String, $msgId: String!) {
   clusters(name: $name) {
     name
     stats {
@@ -89,6 +89,36 @@ query clusters($name: String, $like: String, $group: String) {
       }
     }
   }
+  msg(msgId: $msgId) {
+    info {
+      msgId
+      topic
+      flag
+      body
+      queueId
+      storeSize
+      queueOffset
+      sysFlag
+      bornTimestamp
+      bornHost
+      storeTimestamp
+      storeHost
+      commitLogOffset
+      bodyCRC
+      reconsumeTimes
+      preparedTransactionOffset
+      properties {
+        key
+        val
+      }
+    }
+    tracks {
+      code
+      type
+      consumeGroup
+      desc
+    }
+  }
 }
 ```
 
@@ -104,6 +134,7 @@ schema {
 # The query type, represents all of the entry points into our object graph
 type Query {
     clusters(name: String): [Cluster]!
+	msg(name: String, msgId: String!): Message
 }
 
 # A Cluster from the boltmq server
@@ -327,5 +358,87 @@ type ConsumeProgressData {
 	brokerName: String!
 	# The queue id
 	queueId: Int!
+}
+
+# message
+type Message {
+	# The message base info
+	info: MessageInfo!
+	# The message track list
+	tracks: [MessageTrack]!
+}
+
+# message info
+type MessageInfo {
+	# The message id
+	msgId: String!
+	# The topic name
+	topic: String!
+	# The message flag
+	flag: Int!
+	# The message body
+	body: String!
+	# The queue id
+	queueId: Int!
+	# The store size
+	storeSize: Int!
+	# The queue offset
+	queueOffset: Int!
+	# The message sys flag
+	sysFlag: Int!
+	# The born timestamp
+	bornTimestamp: String!
+	# The born host 
+	bornHost: String!
+	# The store timestamp
+	storeTimestamp: String!
+	# The store host 
+	storeHost: String!
+	# The commitlog offset
+	commitLogOffset: Int!
+	# The message body crc
+	bodyCRC: Int!
+	# The reconsume times
+	reconsumeTimes: Int!
+	# The reconsume times
+	preparedTransactionOffset: Int!
+	# The properties
+	properties: [Property!]!
+}
+
+# property, replace map
+type Property {
+	key: String!
+	val: String!
+}
+
+# message track
+type MessageTrack {
+	# The track code, 0: success, non-0: failed
+	code: Int!
+	# track type
+	type: Int!
+	# consume group name
+	consumeGroup: String!
+	# error describe
+	desc: String!
+}
+
+# track type
+enum TrackType {
+	# subscribed and consumed
+	SUBSCRIBEDANDCONSUMED
+	# subscribed but filterd
+	SUBSCRIBEDBUTFILTERD
+	# subscribed but pull
+	SUBSCRIBEDBUTPULL
+	# subscribed and not consume yet
+	SUBSCRIBEDBUTNOTCONSUMEYET
+	# unknow exeption
+	UNKNOWEXEPTION
+	# not subscribed and not consumed
+	NOTSUBSCRIBEDANDNOTCONSUMED
+	# consume groupId not online
+	CONSUMEGROUPIDNOTONLINE
 }
 ```

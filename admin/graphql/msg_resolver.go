@@ -25,6 +25,16 @@ func (r *messageResolver) Info(ctx context.Context) (*messageInfoResolver, error
 	return &messageInfoResolver{msg: msgInfo}, nil
 }
 
+func (r *messageResolver) Tracks(ctx context.Context) ([]*messageTrackResolver, error) {
+	var tracks []*messageTrackResolver
+	mtrs := mockQueryMsgTracks(r.name, r.msgId)
+	for _, track := range mtrs {
+		tracks = append(tracks, &messageTrackResolver{track: track})
+	}
+
+	return tracks, nil
+}
+
 type messageInfoResolver struct {
 	msg *messageInfo
 }
@@ -114,4 +124,24 @@ func (r *propertyResolver) Key(ctx context.Context) string {
 
 func (r *propertyResolver) Val(ctx context.Context) string {
 	return r.val
+}
+
+type messageTrackResolver struct {
+	track *messageTrack
+}
+
+func (r *messageTrackResolver) Code(ctx context.Context) int32 {
+	return r.track.code
+}
+
+func (r *messageTrackResolver) ConsumeGroup(ctx context.Context) string {
+	return r.track.consumeGroup
+}
+
+func (r *messageTrackResolver) Type(ctx context.Context) int32 {
+	return int32(r.track.trackType)
+}
+
+func (r *messageTrackResolver) Desc(ctx context.Context) string {
+	return r.track.desc
 }

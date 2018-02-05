@@ -250,7 +250,10 @@ type ConsumeProgressData {
 
 # message
 type Message {
+	# The message base info
 	info: MessageInfo!
+	# The message track list
+	tracks: [MessageTrack]!
 }
 
 # message info
@@ -295,5 +298,35 @@ type MessageInfo {
 type Property {
 	key: String!
 	val: String!
+}
+
+# message track
+type MessageTrack {
+	# The track code, 0: success, non-0: failed
+	code: Int!
+	# track type
+	type: Int!
+	# consume group name
+	consumeGroup: String!
+	# error describe
+	desc: String!
+}
+
+# track type
+enum TrackType {
+	# subscribed and consumed
+	SUBSCRIBEDANDCONSUMED
+	# subscribed but filterd
+	SUBSCRIBEDBUTFILTERD
+	# subscribed but pull
+	SUBSCRIBEDBUTPULL
+	# subscribed and not consume yet
+	SUBSCRIBEDBUTNOTCONSUMEYET
+	# unknow exeption
+	UNKNOWEXEPTION
+	# not subscribed and not consumed
+	NOTSUBSCRIBEDANDNOTCONSUMED
+	# consume groupId not online
+	CONSUMEGROUPIDNOTONLINE
 }
 `

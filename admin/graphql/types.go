@@ -148,3 +148,22 @@ type messageInfo struct {
 	preparedTransactionOffset int64
 	properties                map[string]string
 }
+
+type messageTrack struct {
+	code         int32
+	consumeGroup string
+	trackType    TrackType
+	desc         string
+}
+
+type TrackType int
+
+const (
+	SubscribedAndConsumed TrackType = iota
+	SubscribedButFilterd
+	SubscribedButPull
+	SubscribedAndNotConsumeYet
+	UnknowExeption
+	NotSubscribedAndNotConsumed
+	ConsumeGroupIdNotOnline
+)
