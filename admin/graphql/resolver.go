@@ -17,9 +17,9 @@ import (
 	"context"
 )
 
-type QueryResolver struct{}
+type Resolver struct{}
 
-func (r *QueryResolver) Clusters(ctx context.Context, args struct{ Name *string }) ([]*clusterResolver, error) {
+func (r *Resolver) Clusters(ctx context.Context, args struct{ Name *string }) ([]*clusterResolver, error) {
 	var crs []*clusterResolver
 
 	clusters := mockQueryCluster(args.Name)
@@ -30,9 +30,23 @@ func (r *QueryResolver) Clusters(ctx context.Context, args struct{ Name *string 
 	return crs, nil
 }
 
-func (r *QueryResolver) Msg(ctx context.Context, args struct {
+func (r *Resolver) Msg(ctx context.Context, args struct {
 	Name  *string
 	MsgId string
 }) (*messageResolver, error) {
 	return &messageResolver{name: args.Name, msgId: args.MsgId}, nil
+}
+
+func (r *Resolver) Create2UpdateTopic(ctx context.Context, args struct {
+	Name  string
+	Topic topicInput
+}) (*topicRespResolver, error) {
+	return &topicRespResolver{}, nil
+}
+
+func (r *Resolver) DeleteTopic(ctx context.Context, args struct {
+	Name  string
+	Topic string
+}) (*topicRespResolver, error) {
+	return &topicRespResolver{}, nil
 }

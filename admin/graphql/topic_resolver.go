@@ -160,3 +160,25 @@ func (r *brokerAddrResolver) BrokerId(ctx context.Context) int32 {
 func (r *brokerAddrResolver) Addr(ctx context.Context) string {
 	return r.ba
 }
+
+// mutation api
+type topicInput struct {
+	Topic          string
+	WriteQueueNums int32
+	ReadQueueNums  int32
+	Unit           bool
+	Order          bool
+}
+
+type topicRespResolver struct {
+	code int32
+	desc string
+}
+
+func (r *topicRespResolver) Code(ctx context.Context) int32 {
+	return r.code
+}
+
+func (r *topicRespResolver) Desc(ctx context.Context) string {
+	return r.desc
+}

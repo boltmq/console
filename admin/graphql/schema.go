@@ -17,6 +17,7 @@ var Schema = `
 # boltmq contole graphql schema
 schema {
 	query: Query
+	mutation: Mutation
 }
 
 # The query type, represents all of the entry points into our object graph
@@ -328,5 +329,31 @@ enum TrackType {
 	NOTSUBSCRIBEDANDNOTCONSUMED
 	# consume groupId not online
 	CONSUMEGROUPIDNOTONLINE
+}
+
+# The mutation type, represents all updates we can make to our data
+type Mutation {
+	create2UpdateTopic(name: String!, topic: TopicInput!): TopicResp
+	deleteTopic(name: String!, topic: String!): TopicResp
+}
+
+# The input object sent when cluster is creating a new topic
+input TopicInput {
+	# topic
+	topic: String!
+	# The read queue nums, optional
+	readQueueNums: Int!
+	# The write queue nums, optional
+    writeQueueNums: Int!
+	# The order topic, optional
+	order: Boolean! 
+	# The unit topic, optional
+	unit: Boolean!
+}
+
+# Represents a topic for a cluster
+type TopicResp {
+	code: Int!
+	desc: String!
 }
 `

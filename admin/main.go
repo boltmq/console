@@ -49,6 +49,6 @@ func main() {
 	fmt.Printf("console is running on port %d.\n", *port)
 	fmt.Printf("Begin with Get      : http://localhost:%d\n", *port)
 	server.New().Root(*prefix, *root, *index).
-		LoadGraphQL("/api", graphql.Schema, &graphql.QueryResolver{}).
+		LoadGraphQL("/api", graphql.Schema, &graphql.Resolver{}).
 		Debug(*debug).Listen(*port).Run()
 }
