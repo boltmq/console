@@ -22,6 +22,7 @@ schema {
 # The query type, represents all of the entry points into our object graph
 type Query {
     clusters(name: String): [Cluster]!
+	msg(name: String, msgId: String!): Message
 }
 
 # A Cluster from the boltmq server
@@ -245,5 +246,54 @@ type ConsumeProgressData {
 	brokerName: String!
 	# The queue id
 	queueId: Int!
+}
+
+# message
+type Message {
+	info: MessageInfo!
+}
+
+# message info
+type MessageInfo {
+	# The message id
+	msgId: String!
+	# The topic name
+	topic: String!
+	# The message flag
+	flag: Int!
+	# The message body
+	body: String!
+	# The queue id
+	queueId: Int!
+	# The store size
+	storeSize: Int!
+	# The queue offset
+	queueOffset: Int!
+	# The message sys flag
+	sysFlag: Int!
+	# The born timestamp
+	bornTimestamp: String!
+	# The born host 
+	bornHost: String!
+	# The store timestamp
+	storeTimestamp: String!
+	# The store host 
+	storeHost: String!
+	# The commitlog offset
+	commitLogOffset: Int!
+	# The message body crc
+	bodyCRC: Int!
+	# The reconsume times
+	reconsumeTimes: Int!
+	# The reconsume times
+	preparedTransactionOffset: Int!
+	# The properties
+	properties: [Property!]!
+}
+
+# property, replace map
+type Property {
+	key: String!
+	val: String!
 }
 `

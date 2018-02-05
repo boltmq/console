@@ -7,6 +7,7 @@ schema {
 # The query type, represents all of the entry points into our object graph
 type Query {
     clusters(name: String): [Cluster]!
+    msg(name: String, msgId String!): Message
 }
 
 # A Cluster from the boltmq server

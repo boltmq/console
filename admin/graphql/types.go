@@ -128,3 +128,23 @@ type consumeProgressData struct {
 	brokerName    string
 	queueId       int32
 }
+
+type messageInfo struct {
+	topic                     string
+	flag                      int32
+	body                      string
+	queueId                   int32
+	storeSize                 int32
+	queueOffset               int64
+	sysFlag                   int32
+	bornTimestamp             string
+	bornHost                  string
+	storeTimestamp            string
+	storeHost                 string
+	msgId                     string
+	commitLogOffset           int64
+	bodyCRC                   int32
+	reconsumeTimes            int32
+	preparedTransactionOffset int64
+	properties                map[string]string
+}

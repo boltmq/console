@@ -32,6 +32,13 @@ func (r *QueryResolver) Clusters(ctx context.Context, args struct{ Name *string 
 	return crs, nil
 }
 
+func (r *QueryResolver) Msg(ctx context.Context, args struct {
+	Name  *string
+	MsgId string
+}) (*messageResolver, error) {
+	return &messageResolver{name: args.Name, msgId: args.MsgId}, nil
+}
+
 type clusterResolver struct {
 	c *cluster
 }

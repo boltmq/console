@@ -608,3 +608,108 @@ func mockQueryTopicsConsumeProgress(name, topic string, group *string) []*consum
 
 	return cps
 }
+
+var mockMsgsInfo = map[string]map[string]*messageInfo{
+	"cluster1": map[string]*messageInfo{
+		"msgid1abcdefghajklmnopqrstuvwxyz": &messageInfo{
+			topic:                     "topic1",
+			flag:                      1,
+			body:                      "content body 1",
+			queueId:                   1,
+			storeSize:                 10,
+			queueOffset:               10,
+			sysFlag:                   1,
+			bornTimestamp:             "2018-2-4 10:30:10",
+			bornHost:                  "192.168.0.10",
+			storeTimestamp:            "2018-2-4 10:30:20",
+			storeHost:                 "10.1.0.2:11911",
+			msgId:                     "msgid1abcdefghajklmnopqrstuvwxyz",
+			commitLogOffset:           10,
+			bodyCRC:                   1,
+			reconsumeTimes:            0,
+			preparedTransactionOffset: 0,
+			properties:                map[string]string{"p1": "v1", "p2": "v2"},
+		},
+		"msgid2abcdefghajklmnopqrstuvwxyz": &messageInfo{
+			topic:                     "topic2",
+			flag:                      2,
+			body:                      "content body 2",
+			queueId:                   2,
+			storeSize:                 20,
+			queueOffset:               20,
+			sysFlag:                   2,
+			bornTimestamp:             "2018-2-4 10:30:10",
+			bornHost:                  "192.168.0.11",
+			storeTimestamp:            "2018-2-4 10:30:20",
+			storeHost:                 "10.1.0.3:11911",
+			msgId:                     "msgid1abcdefghajklmnopqrstuvwxyz",
+			commitLogOffset:           20,
+			bodyCRC:                   2,
+			reconsumeTimes:            0,
+			preparedTransactionOffset: 0,
+			properties:                map[string]string{"pp1": "vv1", "pp2": "vv2"},
+		},
+	},
+	"cluster2": map[string]*messageInfo{
+		"msgid3abcdefghajklmnopqrstuvwxyz": &messageInfo{
+			topic:                     "topic3",
+			flag:                      3,
+			body:                      "content body 3",
+			queueId:                   3,
+			storeSize:                 30,
+			queueOffset:               30,
+			sysFlag:                   3,
+			bornTimestamp:             "2018-2-4 10:30:10",
+			bornHost:                  "192.168.0.13",
+			storeTimestamp:            "2018-2-4 10:30:20",
+			storeHost:                 "10.1.0.4:11911",
+			msgId:                     "msgid3abcdefghajklmnopqrstuvwxyz",
+			commitLogOffset:           30,
+			bodyCRC:                   3,
+			reconsumeTimes:            0,
+			preparedTransactionOffset: 0,
+			properties:                map[string]string{"p3": "v3", "p4": "v4"},
+		},
+		"msgid4abcdefghajklmnopqrstuvwxyz": &messageInfo{
+			topic:                     "topic4",
+			flag:                      4,
+			body:                      "content body 4",
+			queueId:                   4,
+			storeSize:                 40,
+			queueOffset:               40,
+			sysFlag:                   4,
+			bornTimestamp:             "2018-2-4 10:30:10",
+			bornHost:                  "192.168.0.14",
+			storeTimestamp:            "2018-2-4 10:30:20",
+			storeHost:                 "10.1.0.4:11911",
+			msgId:                     "msgid4abcdefghajklmnopqrstuvwxyz",
+			commitLogOffset:           40,
+			bodyCRC:                   2,
+			reconsumeTimes:            0,
+			preparedTransactionOffset: 0,
+			properties:                map[string]string{"pp3": "vv3", "pp4": "vv4"},
+		},
+	},
+}
+
+func mockQueryMsgsInfo(name *string, msgId string) *messageInfo {
+	for n, amsgs := range mockMsgsInfo {
+		if name == nil || *name == "" {
+			for mid, msg := range amsgs {
+				if mid == msgId {
+					return msg
+				}
+			}
+		} else {
+			if *name == n {
+				for mid, msg := range amsgs {
+					if mid == msgId {
+						return msg
+					}
+				}
+			}
+		}
+	}
+
+	return &messageInfo{}
+}
