@@ -40,13 +40,13 @@ func (r *Resolver) Msg(ctx context.Context, args struct {
 func (r *Resolver) Create2UpdateTopic(ctx context.Context, args struct {
 	Name  string
 	Topic topicInput
-}) (*topicRespResolver, error) {
-	return &topicRespResolver{}, nil
+}) (*topicResponseResolver, error) {
+	return &topicResponseResolver{}, nil
 }
 
 func (r *Resolver) DeleteTopic(ctx context.Context, args struct {
 	Name  string
 	Topic string
-}) (*topicRespResolver, error) {
-	return &topicRespResolver{}, nil
+}) (*topicResponseResolver, error) {
+	return &topicResponseResolver{}, nil
 }

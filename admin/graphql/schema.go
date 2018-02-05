@@ -333,8 +333,8 @@ enum TrackType {
 
 # The mutation type, represents all updates we can make to our data
 type Mutation {
-	create2UpdateTopic(name: String!, topic: TopicInput!): TopicResp
-	deleteTopic(name: String!, topic: String!): TopicResp
+	create2UpdateTopic(name: String!, topic: TopicInput!): TopicResponse
+	deleteTopic(name: String!, topic: String!): TopicResponse
 }
 
 # The input object sent when cluster is creating a new topic
@@ -352,7 +352,12 @@ input TopicInput {
 }
 
 # Represents a topic for a cluster
-type TopicResp {
+interface Response {
+	code: Int!
+	desc: String!
+}
+
+type TopicResponse implements Response {
 	code: Int!
 	desc: String!
 }

@@ -130,6 +130,29 @@ mutation create2UpdateTopic($name: String!, $topic: TopicInput!) {
     desc
   }
 }
+{
+  "name": "cluster1",
+  "topic": {
+    "topic": "abc",
+    "readQueueNums": 8,
+    "writeQueueNums": 8,
+    "order": false,
+    "unit": false
+  }
+}
+```
+
+```
+mutation deleteTopic($name: String!, $topic: String!) {
+  deleteTopic(name: $name, topic: $topic) {
+    code
+    desc
+  }
+}
+{
+  "name": "cluster1",
+  "topic": "abc"
+}
 ```
 
 # GraphQL Schema
@@ -453,8 +476,8 @@ enum TrackType {
 
 # The mutation type, represents all updates we can make to our data
 type Mutation {
-	create2UpdateTopic(name: String!, topic: TopicInput!): TopicResp
-	deleteTopic(name: String!, topic: String!): TopicResp
+	create2UpdateTopic(name: String!, topic: TopicInput!): TopicResponse
+	deleteTopic(name: String!, topic: String!): TopicResponse
 }
 
 # The input object sent when cluster is creating a new topic
@@ -472,7 +495,12 @@ input TopicInput {
 }
 
 # Represents a topic for a cluster
-type TopicResp {
+interface Response {
+	code: Int!
+	desc: String!
+}
+
+type TopicResponse implements Response {
 	code: Int!
 	desc: String!
 }

@@ -13,7 +13,9 @@
 // limitations under the License.
 package graphql
 
-import "context"
+import (
+	"context"
+)
 
 type topicResolver struct {
 	name string
@@ -170,15 +172,20 @@ type topicInput struct {
 	Order          bool
 }
 
-type topicRespResolver struct {
+type responseResolver interface {
+	Code(ctx context.Context) int32
+	Desc(ctx context.Context) string
+}
+
+type topicResponseResolver struct {
 	code int32
 	desc string
 }
 
-func (r *topicRespResolver) Code(ctx context.Context) int32 {
+func (r *topicResponseResolver) Code(ctx context.Context) int32 {
 	return r.code
 }
 
-func (r *topicRespResolver) Desc(ctx context.Context) string {
+func (r *topicResponseResolver) Desc(ctx context.Context) string {
 	return r.desc
 }
