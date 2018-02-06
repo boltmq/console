@@ -20,6 +20,8 @@ import (
 
 	"github.com/boltmq/console/admin/graphql"
 	"github.com/boltmq/console/admin/server"
+	"github.com/juju/errors"
+	daemon "github.com/sevlyar/go-daemon"
 )
 
 const (
@@ -29,7 +31,9 @@ const (
 func main() {
 	h := flag.Bool("h", false, "help")
 	v := flag.Bool("v", false, "version")
+	f := flag.Bool("f", false, "run front terminal")
 	port := flag.Int("p", 8000, "listen port")
+	pid := flag.String("pid", "console.pid", "pid file")
 	root := flag.String("root", "", "web root")
 	prefix := flag.String("perfix", "/", "web root prefix url")
 	index := flag.String("index", "index.html", "default home url")
@@ -46,9 +50,39 @@ func main() {
 		os.Exit(0)
 	}
 
+	if !*f {
+		dctx, err := runDaemon(*pid)
+		if err != nil {
+			os.Exit(0)
+		}
+		defer dctx.Release()
+	}
+
 	fmt.Printf("console is running on port %d.\n", *port)
 	fmt.Printf("Begin with Get      : http://localhost:%d\n", *port)
 	server.New().Root(*prefix, *root, *index).
 		LoadGraphQL("/api", graphql.Schema, &graphql.Resolver{}).
 		Debug(*debug).Listen(*port).Run()
+}
+
+func runDaemon(pidfile string) (*daemon.Context, error) {
+	cntxt := &daemon.Context{
+		PidFileName: pidfile,
+		PidFilePerm: 0644,
+		LogFileName: "",
+		LogFilePerm: 0640,
+		WorkDir:     "./",
+		Umask:       027,
+		Args:        nil,
+	}
+
+	d, err := cntxt.Reborn()
+	if err != nil {
+		return nil, err
+	}
+	if d != nil {
+		return nil, errors.Errorf("child process not nil.")
+	}
+
+	return cntxt, nil
 }
