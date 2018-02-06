@@ -13,21 +13,23 @@ This is a background program - console, used to manage nodes of boltmq cluster.
 ### Running Param
 
 * -p listen port
+* -f run as foreground
+* --pid file, default console.pid.
 * --root web root, use file server. not config is disable.
-* --perfix web perfix url, use with --root option.
+* --prefix web prefix url, use with --root option.
 * --index web home url, use with --root option. default index.html
 * --debug open debug model & grapql debug api(http://localhost/debug), use with development env.
 
 E.g
 ```
-# enable Built-in file server, set web root and url perfix.
-./admin --root=./sources/ --perfix=/sources/
+# enable Built-in file server, set web root and url prefix.
+./admin --root=./sources/ --prefix=/sources/
 ```
 
 or
 
 ```
 # open grapiql debug, use development debug.
-./admin --debug
+./admin -f --debug
 ```
 

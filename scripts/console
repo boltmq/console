@@ -1,0 +1,131 @@
+#!/bin/sh
+# Copyright 2017 luoji
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+
+#    http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.   
+
+
+# OPTIONS:
+#   -f: start in foreground
+#   -p <port>: listen port (useful to accept request, default 8000)
+#   -v: print version string and exit
+#   --root <path>: web root, use file server. not config is disable.
+#   --prefix <url-prefix>: web prefix url, use with --root option.
+#   --index <url-path>: web home url, use with --root option. default index.html.
+#   --debug: open debug model & grapql debug api(http://localhost/debug), use with development env.
+
+
+
+# CONTROLLING STARTUP:
+#
+# This script relies on few environment variables to determine startup
+# behavior, those variables are:
+#
+#
+# NB: Developers should be aware that this script should remain compatible with
+# POSIX sh and Solaris sh. This means, in particular, no $(( )) and no $( ).
+curdir="$(cd `dirname $0`; pwd)" 
+service_name=console
+launch_service_bin=$curdir/service/${service_name}d
+isstartup="y"
+
+launch_service()
+{
+    params="$1"
+
+    $launch_service_bin $params
+    echo "$service_name startup, please wait a few minutes."
+
+    return $?
+}
+
+stop_service()
+{
+    pid="`ps aux | grep ${service_name}d | grep -v grep | awk '{print $2}'`"
+    if [ "x$pid" == "x" ] ; then
+        echo "$service_name stop already."
+        return $?
+    fi
+
+    kill "$pid"
+    echo "kill $service_name, please wait a few minutes."
+    return $?
+}
+
+status_service()
+{
+    pid="`ps aux | grep ${service_name}d | grep -v grep | awk '{print $2}'`"
+    if [ "x$pid" == "x" ] ; then
+        echo "$service_name is down."
+        return $?
+    fi
+
+    pidlog=`ps -p $pid | grep $pid`
+    if [ "x$pidlog" != "x" ] ; then
+        echo "$service_name is running. ($pid)"
+    else
+        echo "$service_name is down."
+    fi
+
+    return $?
+}
+
+while true; do
+    case "$1" in
+        -h)
+            echo "Usage: $0 [-f] [-h] [-p prot] [--pid=pidfile] [--root=webroot] [--prefix=webroot] [--index=index.html] [--debug]"
+            exit 0
+        ;;
+        -v)
+            $launch_service_bin -v
+            exit 0
+        ;;
+        start)
+            isstartup="y"
+            shift
+            params="$*"
+            break
+        ;;
+        stop)
+            isstartup="n"
+            shift
+        ;;
+        status)
+            status_service
+            exit 0
+        ;;
+        --)
+            shift
+            if [ "x$*" != "x" ] ; then
+                echo "Error parsing arguments! Unknown argument \"$*\"" >&2
+                exit 1
+            fi
+            break
+        ;;
+        *)
+            if [ "x$*" != "x" ] ; then
+                echo "Error parsing arguments! Unknown argument \"$1\"" >&2
+                exit 1
+            fi
+            break
+        ;;
+    esac
+done
+
+if [ "x$isstartup" != "xy" ] ; then
+    # Stop the service
+    stop_service
+else
+    # Start up the service
+    launch_service "$params"
+fi
+

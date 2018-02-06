@@ -35,7 +35,7 @@ func main() {
 	port := flag.Int("p", 8000, "listen port")
 	pid := flag.String("pid", "console.pid", "pid file")
 	root := flag.String("root", "", "web root")
-	prefix := flag.String("perfix", "/", "web root prefix url")
+	prefix := flag.String("prefix", "/", "web root prefix url")
 	index := flag.String("index", "index.html", "default home url")
 	debug := flag.Bool("debug", false, "debug model")
 

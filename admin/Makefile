@@ -1,7 +1,7 @@
 .PHONY: all deps compile test cover clean
 
 OUTDIR=.
-OUTBIN=console
+OUTBIN=consoled
 
 all:compile
 

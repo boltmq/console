@@ -37,7 +37,9 @@ func (srv *Server) Root(pattern, webRoot, index string) *Server {
 	if webRoot != "" {
 		srv.mux.Handle(pattern, http.StripPrefix(pattern, http.FileServer(http.Dir(webRoot))))
 		index = fmt.Sprintf("%s%s", pattern, index)
-		srv.mux.Handle("/", http.RedirectHandler(index, http.StatusFound))
+		if pattern != "/" {
+			srv.mux.Handle("/", http.RedirectHandler(index, http.StatusFound))
+		}
 	}
 	return srv
 }
