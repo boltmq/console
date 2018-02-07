@@ -24,6 +24,7 @@ import (
 type Server struct {
 	port int
 	mux  *http.ServeMux
+	auth bool
 }
 
 func New() *Server {
@@ -47,7 +48,18 @@ func (srv *Server) Root(pattern, webRoot, index string) *Server {
 // LoadGraphQL load graphql to pattern.
 func (srv *Server) LoadGraphQL(pattern, schemaString string, resolver interface{}, opts ...graphql.SchemaOpt) *Server {
 	schema := graphql.MustParseSchema(schemaString, resolver, opts...)
-	srv.mux.Handle(pattern, &relay.Handler{Schema: schema})
+	if srv.auth {
+		srv.mux.Handle(pattern, join(&relay.Handler{Schema: schema}, &authenticator{}))
+	} else {
+		srv.mux.Handle(pattern, join(&relay.Handler{Schema: schema}))
+	}
+	return srv
+}
+
+// SetAuth set auth and set login url pattern.
+func (srv *Server) SetAuth(open bool, pattern string) *Server {
+	srv.auth = open
+	srv.mux.Handle(pattern, &loginHandler{})
 	return srv
 }
 

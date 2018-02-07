@@ -30,6 +30,6 @@ or
 
 ```
 # open grapiql debug, use development debug.
-./admin -f --debug
+./admin -f --debug --noauth
 ```
 

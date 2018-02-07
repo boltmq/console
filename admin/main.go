@@ -38,6 +38,7 @@ func main() {
 	prefix := flag.String("prefix", "/", "web root prefix url")
 	index := flag.String("index", "index.html", "default home url")
 	debug := flag.Bool("debug", false, "debug model")
+	noauth := flag.Bool("noauth", false, "debug model")
 
 	flag.Parse()
 	if *h {
@@ -61,7 +62,7 @@ func main() {
 	fmt.Printf("console is running on port %d.\n", *port)
 	fmt.Printf("Begin with Get      : http://localhost:%d\n", *port)
 	server.New().Root(*prefix, *root, *index).
-		LoadGraphQL("/api", graphql.Schema, &graphql.Resolver{}).
+		SetAuth(!*noauth, "/login").LoadGraphQL("/api", graphql.Schema, &graphql.Resolver{}).
 		Debug(*debug).Listen(*port).Run()
 }
 
