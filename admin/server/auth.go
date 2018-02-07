@@ -17,7 +17,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"regexp"
 
 	jwt "github.com/dgrijalva/jwt-go"
 )
@@ -42,15 +41,7 @@ type authenticator struct {
 
 func (auth *authenticator) Chain(w http.ResponseWriter, r *http.Request, ctx *Context) bool {
 	// extract jwt
-	authorizationHeader := r.Header.Get("Authorization")
-	authRegex, _ := regexp.Compile("(?:Bearer *)([^ ]+)(?: *)")
-	authRegexMatches := authRegex.FindStringSubmatch(authorizationHeader)
-	if len(authRegexMatches) != 2 {
-		// didn't match valid Authorization header pattern
-		http.Error(w, "not authorized", http.StatusUnauthorized)
-		return false
-	}
-	jwtToken := authRegexMatches[1]
+	jwtToken := r.Header.Get("Authorization")
 
 	// parse tokentoken
 	token, err := jwt.ParseWithClaims(jwtToken, &userClaims{}, func(token *jwt.Token) (interface{}, error) {
