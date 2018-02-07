@@ -18,7 +18,8 @@ This is a background program - console, used to manage nodes of boltmq cluster.
 * --root web root, use file server. not config is disable.
 * --prefix web prefix url, use with --root option.
 * --index web home url, use with --root option. default index.html
-* --debug open debug model & grapql debug api(http://localhost/debug), use with development env.
+* --debug running debug model(http://localhost/debug), by development env.
+* --noauth disable user auth, by development env.
 
 E.g
 ```
