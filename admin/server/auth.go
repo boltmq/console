@@ -15,11 +15,9 @@ package server
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"regexp"
-	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
 )
@@ -55,7 +53,7 @@ func (auth *authenticator) Chain(w http.ResponseWriter, r *http.Request, ctx *Co
 	jwtToken := authRegexMatches[1]
 
 	// parse tokentoken
-	token, err := jwt.ParseWithClaims(jwtToken, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(jwtToken, &userClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method")
 		}
@@ -74,51 +72,4 @@ func (auth *authenticator) Chain(w http.ResponseWriter, r *http.Request, ctx *Co
 
 	ctx.ctx = context.WithValue(r.Context(), userAuthKey, claims.user)
 	return true
-}
-
-type loginHandler struct {
-}
-
-func (h *loginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	decoder := json.NewDecoder(r.Body)
-	userParam := struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}{}
-
-	err := decoder.Decode(&userParam)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer r.Body.Close()
-
-	if userParam.Username != "admin" || userParam.Password != "admin" {
-		http.Error(w, "invalid login", http.StatusUnauthorized)
-		return
-	}
-
-	//generate token
-	expire := time.Now().Add(time.Hour * 1).Unix()
-	// Create the Claims
-	claims := userClaims{
-		user: user{
-			UserID:   1,
-			UserName: userParam.Username,
-			IsAdmin:  true,
-		},
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expire,
-			Issuer:    "login",
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	signedToken, _ := token.SignedString(jwtSecret)
-
-	//output token
-	tokenResponse := struct {
-		Token string `json:"token"`
-	}{signedToken}
-	json.NewEncoder(w).Encode(tokenResponse)
 }
