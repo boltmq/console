@@ -24,13 +24,13 @@ This is a background program - console, used to manage nodes of boltmq cluster.
 E.g
 ```
 # enable Built-in file server, set web root and url prefix.
-./admin --root=./sources/ --prefix=/sources/
+./consoled --root=./sources/ --prefix=/sources/
 ```
 
 or
 
 ```
 # open grapiql debug, use development debug.
-./admin -f --debug --noauth
+./consoled -f --debug --noauth
 ```
 
