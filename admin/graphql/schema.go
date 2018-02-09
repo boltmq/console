@@ -35,7 +35,7 @@ type Cluster {
 	# The node info of cluster
     nodes: ClusterNode!
 	# The topics of cluster
-	topics(like: String): [Topic]!
+	topics(like: String, first: Int, after: ID): TopicsConnection!
 }
 
 # A ClusterStats info of boltmq cluster
@@ -90,6 +90,31 @@ type BrokerNode {
     inTotalTodayNums: Int!
 	# The cluster producer msg total number today
     inTotalYestNums: Int!
+}
+
+# A connection object for a cluster's topics
+type TopicsConnection {
+	# The total number of friends
+	total: Int!
+	# The edges for each of the cluster's topics.
+	edges: [TopicsEdge]!
+	# Information for paginating this connection
+	pageInfo: PageInfo!
+}
+
+# A edge object for a cluster's topics
+type TopicsEdge {
+	# A cursor used for pagination
+	cursor: ID!
+	# The character represented by this friendship edge
+	node: Topic
+}
+
+# Information for paginating this connection
+type PageInfo {
+	startCursor: ID
+	endCursor: ID
+	hasNextPage: Boolean!
 }
 
 # A topic info of boltmq cluster

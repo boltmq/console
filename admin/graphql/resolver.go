@@ -15,6 +15,12 @@ package graphql
 
 import (
 	"context"
+	"encoding/base64"
+	"fmt"
+	"strconv"
+	"strings"
+
+	graphql "github.com/neelance/graphql-go"
 )
 
 type Resolver struct{}
@@ -49,4 +55,55 @@ func (r *Resolver) DeleteTopic(ctx context.Context, args struct {
 	Topic string
 }) (*topicResponseResolver, error) {
 	return &topicResponseResolver{}, nil
+}
+
+type pageInfoResolver struct {
+	startCursor graphql.ID
+	endCursor   graphql.ID
+	hasNextPage bool
+}
+
+func (r *pageInfoResolver) StartCursor() *graphql.ID {
+	return &r.startCursor
+}
+
+func (r *pageInfoResolver) EndCursor() *graphql.ID {
+	return &r.endCursor
+}
+
+func (r *pageInfoResolver) HasNextPage() bool {
+	return r.hasNextPage
+}
+
+func parsePageStart2End(size int, first *int32, after *graphql.ID) (start, end int, err error) {
+	if after != nil {
+		b, err := base64.StdEncoding.DecodeString(string(*after))
+		if err != nil {
+			return 0, 0, err
+		}
+
+		i, err := strconv.Atoi(strings.TrimPrefix(string(b), "cursor"))
+		if err != nil {
+			return 0, 0, err
+		}
+
+		start = i
+		if start > size {
+			start = 0
+		}
+	}
+
+	end = size
+	if first != nil {
+		end = start + int(*first)
+		if end > size {
+			end = size
+		}
+	}
+
+	return
+}
+
+func encodeCursor(i int) graphql.ID {
+	return graphql.ID(base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("cursor%d", i+1))))
 }

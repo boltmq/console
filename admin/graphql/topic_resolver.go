@@ -15,7 +15,59 @@ package graphql
 
 import (
 	"context"
+
+	graphql "github.com/neelance/graphql-go"
 )
+
+type topicsConnectionResolver struct {
+	ts    []*topic
+	start int
+	end   int
+	name  string
+}
+
+func (r *topicsConnectionResolver) Total(ctx context.Context) int32 {
+	return int32(len(r.ts))
+}
+
+func (r *topicsConnectionResolver) Edges(ctx context.Context) ([]*topicsEdgeResolver, error) {
+	if r.end <= r.start {
+		return []*topicsEdgeResolver{}, nil
+	}
+
+	l := make([]*topicsEdgeResolver, r.end-r.start)
+	for i := range l {
+		l[i] = &topicsEdgeResolver{
+			cursor: encodeCursor(r.start + i),
+			t:      r.ts[r.start+i],
+			name:   r.name,
+		}
+	}
+
+	return l, nil
+}
+
+func (r *topicsConnectionResolver) PageInfo(ctx context.Context) (*pageInfoResolver, error) {
+	return &pageInfoResolver{
+		startCursor: encodeCursor(r.start),
+		endCursor:   encodeCursor(r.end - 1),
+		hasNextPage: r.end < len(r.ts),
+	}, nil
+}
+
+type topicsEdgeResolver struct {
+	cursor graphql.ID
+	t      *topic
+	name   string
+}
+
+func (r *topicsEdgeResolver) Cursor() graphql.ID {
+	return r.cursor
+}
+
+func (r *topicsEdgeResolver) Node() *topicResolver {
+	return &topicResolver{t: r.t, name: r.name}
+}
 
 type topicResolver struct {
 	name string

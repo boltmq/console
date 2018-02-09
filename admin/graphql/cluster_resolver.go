@@ -17,6 +17,7 @@ import (
 	"context"
 
 	"github.com/go-errors/errors"
+	graphql "github.com/neelance/graphql-go"
 )
 
 type clusterResolver struct {
@@ -45,15 +46,20 @@ func (r *clusterResolver) Nodes(ctx context.Context) (*clusterNodeResolver, erro
 	return &clusterNodeResolver{cn: cn, name: r.c.name}, nil
 }
 
-func (r *clusterResolver) Topics(ctx context.Context, args struct{ Like *string }) ([]*topicResolver, error) {
-	var trs []*topicResolver
-
+func (r *clusterResolver) Topics(ctx context.Context, args struct {
+	Like  *string
+	First *int32
+	After *graphql.ID
+}) (*topicsConnectionResolver, error) {
 	ts := mockQueryTopics(r.c.name, args.Like)
-	for _, t := range ts {
-		trs = append(trs, &topicResolver{t: t, name: r.c.name})
+	// TODO: sort topics
+
+	start, end, err := parsePageStart2End(len(ts), args.First, args.After)
+	if err != nil {
+		return nil, err
 	}
 
-	return trs, nil
+	return &topicsConnectionResolver{name: r.c.name, ts: ts, start: start, end: end}, nil
 }
 
 type clusterStatsResolver struct {
