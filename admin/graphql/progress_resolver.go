@@ -13,7 +13,58 @@
 // limitations under the License.
 package graphql
 
-import "context"
+import (
+	"context"
+
+	graphql "github.com/neelance/graphql-go"
+)
+
+type consumeProgressConnectionResolver struct {
+	cpcs  []*consumeProgress
+	start int
+	end   int
+}
+
+func (r *consumeProgressConnectionResolver) Total(ctx context.Context) int32 {
+	return int32(len(r.cpcs))
+}
+
+func (r *consumeProgressConnectionResolver) Edges(ctx context.Context) ([]*consumeProgressEdgeResolver, error) {
+	if r.end <= r.start {
+		return []*consumeProgressEdgeResolver{}, nil
+	}
+
+	l := make([]*consumeProgressEdgeResolver, r.end-r.start)
+	for i := range l {
+		l[i] = &consumeProgressEdgeResolver{
+			cursor: encodeCursor(r.start + i),
+			cp:     r.cpcs[r.start+i],
+		}
+	}
+
+	return l, nil
+}
+
+func (r *consumeProgressConnectionResolver) PageInfo(ctx context.Context) (*pageInfoResolver, error) {
+	return &pageInfoResolver{
+		startCursor: encodeCursor(r.start),
+		endCursor:   encodeCursor(r.end - 1),
+		hasNextPage: r.end < len(r.cpcs),
+	}, nil
+}
+
+type consumeProgressEdgeResolver struct {
+	cursor graphql.ID
+	cp     *consumeProgress
+}
+
+func (r *consumeProgressEdgeResolver) Cursor() graphql.ID {
+	return r.cursor
+}
+
+func (r *consumeProgressEdgeResolver) Node() *consumeProgressResolver {
+	return &consumeProgressResolver{cp: r.cp}
+}
 
 type consumeProgressResolver struct {
 	cp *consumeProgress

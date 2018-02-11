@@ -68,7 +68,7 @@ query clusters($name: String, $like: String, $group: String, $msgId: String!, $f
             }
           }
           groups
-          consumeClientConn {
+          consumeClients(first: $first, after: $after) {
             describe
             total
             edges {
@@ -92,17 +92,28 @@ query clusters($name: String, $like: String, $group: String, $msgId: String!, $f
               hasNextPage
             }
           }
-          consumeProgress(group: $group) {
-            consumeGroup
-            tps
-            diff
+          consumeProgresses(group: $group, first: $first, after: $after) {
             total
-            progress {
-              brokerOffset
-              consumeOffset
-              diff
-              brokerName
-              queueId
+            edges {
+              cursor
+              node {
+                consumeGroup
+                tps
+                diff
+                total
+                progress {
+                  brokerOffset
+                  consumeOffset
+                  diff
+                  brokerName
+                  queueId
+                }
+              }
+            }
+            pageInfo {
+              startCursor
+              endCursor
+              hasNextPage
             }
           }
         }
@@ -236,7 +247,7 @@ type TopicsConnection {
 type TopicsEdge {
 	# A cursor used for pagination
 	cursor: ID!
-	# The character represented by this friendship edge
+	# The character represented by this edge
 	node: Topic
 }
 
@@ -262,8 +273,8 @@ type Topic {
 	# The consume group
     groups: [String!]!
 	# The consume connection
-    consumeClientConn(first: Int, after: ID): ConsumeClientConnection!
-	consumeProgress(group: String): [ConsumeProgress]!
+    consumeClients(first: Int, after: ID): ConsumeClientConnection!
+	consumeProgresses(group: String, first: Int, after: ID): ConsumeProgressConnection!
 }
 
 # topic type
@@ -344,7 +355,7 @@ type ConsumeClientConnection {
 type ConsumeClientEdge {
 	# A cursor used for pagination
 	cursor: ID!
-	# The character represented by this friendship edge
+	# The character represented by this edge
 	node: ConsumeClient
 }
 
@@ -386,6 +397,25 @@ enum MessageModel {
 	BROADCASTING 
     # clustering
 	CLUSTERING
+}
+
+
+# consume progress connection
+type ConsumeProgressConnection {
+	# The total number of friends
+	total: Int!
+	# The edges for each of the consume progress's edge.
+	edges: [ConsumeProgressEdge]!
+	# Information for paginating this connection
+	pageInfo: PageInfo!
+}
+
+# consume progress edge
+type ConsumeProgressEdge {
+	# A cursor used for pagination
+	cursor: ID!
+	# The character represented by this edge
+	node: ConsumeProgress
 }
 
 # consume progress
