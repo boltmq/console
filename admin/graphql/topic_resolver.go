@@ -100,8 +100,17 @@ func (r *topicResolver) Groups(ctx context.Context) []string {
 	return mockQueryTopicsGroup(r.name, r.t.topic)
 }
 
-func (r *topicResolver) ConsumeConn(ctx context.Context) (*consumeConnResolver, error) {
-	return &consumeConnResolver{name: r.name, topic: r.t.topic}, nil
+func (r *topicResolver) ConsumeClientConn(ctx context.Context, args struct {
+	First *int32
+	After *graphql.ID
+}) (*consumeClientConnectionResolver, error) {
+	ccs := mockQueryTopicsConsumeClientConns(r.name, r.t.topic)
+	start, end, err := parsePageStart2End(len(ccs), args.First, args.After)
+	if err != nil {
+		return nil, err
+	}
+
+	return &consumeClientConnectionResolver{name: r.name, topic: r.t.topic, ccs: ccs, start: start, end: end}, nil
 }
 
 func (r *topicResolver) ConsumeProgress(ctx context.Context, args struct{ Group *string }) ([]*consumeProgressResolver, error) {

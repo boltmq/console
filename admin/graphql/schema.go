@@ -132,7 +132,7 @@ type Topic {
 	# The consume group
     groups: [String!]!
 	# The consume connection
-    consumeConn: ConsumeConn!
+    consumeClientConn(first: Int, after: ID): ConsumeClientConnection!
 	consumeProgress(group: String): [ConsumeProgress]!
 }
 
@@ -198,16 +198,28 @@ type BrokerAddr {
 	addr: String!
 }
 
-# consume connection
-type ConsumeConn {
+# consume client connection
+type ConsumeClientConnection {
+	# The total number of friends
+	total: Int!
 	# The describe
     describe: String!
-	# The connection
-    conns: [Connection]!
+	# The edges for each of the consume client's edge.
+	edges: [ConsumeClientEdge]!
+	# Information for paginating this connection
+	pageInfo: PageInfo!
 }
 
-# connection info
-type Connection {
+# A edge object for a client's edge
+type ConsumeClientEdge {
+	# A cursor used for pagination
+	cursor: ID!
+	# The character represented by this friendship edge
+	node: ConsumeClient
+}
+
+# consume client info
+type ConsumeClient {
 	# The consume group name
     consumeGroup: String!
 	# The client id

@@ -435,10 +435,10 @@ func mockQueryTopicsGroup(name, topic string) []string {
 	return []string{}
 }
 
-var mockTopicsConsumeConns = map[string]map[string][]*connection{
-	"cluster1": map[string][]*connection{
-		"topic1": []*connection{
-			&connection{
+var mockTopicsConsumeClientConns = map[string]map[string][]*consumeClient{
+	"cluster1": map[string][]*consumeClient{
+		"topic1": []*consumeClient{
+			&consumeClient{
 				consumeGroup:     "consume-group-1",
 				clientId:         "client1",
 				clientAddr:       "10.1.100.1",
@@ -451,8 +451,8 @@ var mockTopicsConsumeConns = map[string]map[string][]*connection{
 				messageModel:     BROADCASTING,
 			},
 		},
-		"topic2": []*connection{
-			&connection{
+		"topic2": []*consumeClient{
+			&consumeClient{
 				consumeGroup:     "consume-group-2",
 				clientId:         "client2",
 				clientAddr:       "10.2.100.1",
@@ -466,9 +466,9 @@ var mockTopicsConsumeConns = map[string]map[string][]*connection{
 			},
 		},
 	},
-	"cluster2": map[string][]*connection{
-		"topic3": []*connection{
-			&connection{
+	"cluster2": map[string][]*consumeClient{
+		"topic3": []*consumeClient{
+			&consumeClient{
 				consumeGroup:     "consume-group-3",
 				clientId:         "client1",
 				clientAddr:       "10.3.100.1",
@@ -481,8 +481,8 @@ var mockTopicsConsumeConns = map[string]map[string][]*connection{
 				messageModel:     BROADCASTING,
 			},
 		},
-		"topic4": []*connection{
-			&connection{
+		"topic4": []*consumeClient{
+			&consumeClient{
 				consumeGroup:     "consume-group-4",
 				clientId:         "client4",
 				clientAddr:       "10.4.100.1",
@@ -498,8 +498,8 @@ var mockTopicsConsumeConns = map[string]map[string][]*connection{
 	},
 }
 
-func mockQueryTopicsConsumeConns(name, topic string) []*connection {
-	for n, tg := range mockTopicsConsumeConns {
+func mockQueryTopicsConsumeClientConns(name, topic string) []*consumeClient {
+	for n, tg := range mockTopicsConsumeClientConns {
 		if name == n {
 			for tp, g := range tg {
 				if topic == tp {
@@ -509,7 +509,7 @@ func mockQueryTopicsConsumeConns(name, topic string) []*connection {
 		}
 	}
 
-	return []*connection{}
+	return []*consumeClient{}
 }
 
 var mockTopicsConsumeProgress = map[string]map[string][]*consumeProgress{

@@ -86,7 +86,7 @@ type brokerData struct {
 	brokerAddrs map[int32]string
 }
 
-type connection struct {
+type consumeClient struct {
 	consumeGroup     string
 	clientId         string
 	clientAddr       string
