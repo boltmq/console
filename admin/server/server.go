@@ -36,11 +36,8 @@ func New() *Server {
 // Root set web root directory server, use store static sources file, etc .html .css .js
 func (srv *Server) Root(pattern, webRoot, index string) *Server {
 	if webRoot != "" {
-		srv.mux.Handle(pattern, http.StripPrefix(pattern, http.FileServer(http.Dir(webRoot))))
-		index = fmt.Sprintf("%s%s", pattern, index)
-		if pattern != "/" {
-			srv.mux.Handle("/", http.RedirectHandler(index, http.StatusFound))
-		}
+		fi := &fileInspection{root: http.Dir(webRoot), prefix: pattern, index: index}
+		srv.mux.Handle(pattern, http.StripPrefix(pattern, join(http.FileServer(http.Dir(webRoot)), fi)))
 	}
 	return srv
 }
